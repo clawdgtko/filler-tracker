@@ -166,14 +166,6 @@ export default {
       return renderShow(showId, lang);
     }
     
-    if (path === '/login') {
-      return renderLogin(lang);
-    }
-    
-    if (path === '/register') {
-      return renderRegister(lang);
-    }
-    
     return new Response('Not Found', { status: 404 });
   }
 };
@@ -268,7 +260,7 @@ function renderHome(lang) {
       secondary: 'Comment ça marche',
       stats: { series: 'Séries référencées', episodes: 'Épisodes notés', price: 'Gratuit, toujours' },
       popular: 'Séries populaires',
-      free: '3 épisodes gratuits, puis connexion requise',
+      free: 'Tous les guides gratuits',
       why: 'Pourquoi utiliser Filler Tracker',
       features: [
         { num: '01', title: 'Gagne du temps', desc: 'Skip les fillers qui n\'avancent pas l\'histoire. Concentre-toi sur l\'essentiel.' },
@@ -285,7 +277,7 @@ function renderHome(lang) {
       secondary: 'How it works',
       stats: { series: 'Shows referenced', episodes: 'Episodes rated', price: 'Free, always' },
       popular: 'Popular shows',
-      free: '3 free episodes, then login required',
+      free: 'All guides free',
       why: 'Why use Filler Tracker',
       features: [
         { num: '01', title: 'Save time', desc: 'Skip fillers that don\'t advance the story. Focus on what matters.' },
@@ -602,7 +594,6 @@ function renderHome(lang) {
             <a href="/">${lang === 'fr' ? 'Accueil' : 'Home'}</a>
             <a href="#shows">${lang === 'fr' ? 'Séries' : 'Shows'}</a>
             <button class="lang-switch" onclick="toggleLang()">${t.langLabel}</button>
-            <a href="/login" class="nav-cta">${lang === 'fr' ? 'Connexion' : 'Login'}</a>
         </div>
     </nav>
 
@@ -988,10 +979,4 @@ function renderShow(showId, lang) {
   return new Response(html, { headers: { 'Content-Type': 'text/html; charset=utf-8' } });
 }
 
-function renderLogin(lang) {
-  return new Response('Login page', { status: 200 });
-}
-
-function renderRegister(lang) {
-  return new Response('Register page', { status: 200 });
-}
+// All content is free - no login required
