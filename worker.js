@@ -188,13 +188,13 @@ async function renderHome(tmdb, lang, tmdbLang) {
   
   const showsHtml = showsData.map(show => `
     <a href="/show/${show.id}" class="show-card">
-        <div class="show-poster" style="background-image: url('${show.poster || ''}'); background-size: cover; background-position: center;">
-            ${!show.poster ? '<span style="font-size: 3rem;">📺</span>' : ''}
+        <div class="show-poster" style="background-image: url('${show.poster || ''}');">
+            ${!show.poster ? '<span style="font-size: 3rem; z-index: 1;">📺</span>' : ''}
         </div>
         <div class="show-info">
             <h3 class="show-title">${show.name}</h3>
-            <p class="show-meta">${show.seasons} ${lang === 'fr' ? 'saisons' : 'seasons'} • ${show.year} • ⭐ ${show.rating}</p>
-            <span class="tag">${show.genres}</span>
+            <p class="show-meta">${show.year} • ${show.seasons} ${lang === 'fr' ? 'saisons' : 'seasons'}</p>
+            <span class="show-rating">⭐ ${show.rating}</span>
         </div>
     </a>
   `).join('');
@@ -374,57 +374,81 @@ async function renderHome(tmdb, lang, tmdbLang) {
       
       .shows-grid {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 24px;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
       }
       
       .show-card {
-        background: var(--surface);
-        border: 1px solid var(--border);
-        border-radius: 12px;
+        position: relative;
+        border-radius: 8px;
         overflow: hidden;
         text-decoration: none;
         color: var(--text);
-        transition: all 0.2s;
+        transition: all 0.3s ease;
+        aspect-ratio: 2/3;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.4);
       }
       
       .show-card:hover {
-        border-color: var(--accent);
-        transform: translateY(-4px);
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 12px 40px rgba(0,0,0,0.5);
       }
       
       .show-poster {
-        height: 280px;
-        background: linear-gradient(135deg, #1a1a1a 0%, #0c0c0c 100%);
+        position: absolute;
+        inset: 0;
+        background-size: cover;
+        background-position: center;
         display: flex;
         align-items: center;
         justify-content: center;
-        border-bottom: 1px solid var(--border);
       }
       
-      .show-info { padding: 20px; }
+      .show-poster::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top, 
+          rgba(12,12,12,0.95) 0%, 
+          rgba(12,12,12,0.7) 40%,
+          transparent 70%);
+      }
+      
+      .show-info {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 20px;
+        background: rgba(20, 20, 20, 0.4);
+        backdrop-filter: blur(10px);
+        border-top: 1px solid rgba(255,255,255,0.08);
+      }
       
       .show-title {
         font-family: 'Space Grotesk', sans-serif;
         font-size: 1.1rem;
         font-weight: 600;
-        margin-bottom: 8px;
+        margin-bottom: 6px;
+        line-height: 1.3;
       }
       
       .show-meta {
         color: var(--text-muted);
-        font-size: 0.85rem;
-        margin-bottom: 12px;
+        font-size: 0.8rem;
+        margin-bottom: 8px;
       }
       
-      .tag {
-        display: inline-block;
+      .show-rating {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        background: rgba(255,107,53,0.2);
+        color: var(--accent);
         padding: 4px 10px;
-        background: var(--bg);
-        border: 1px solid var(--border);
         border-radius: 4px;
-        font-size: 0.75rem;
-        color: var(--text-muted);
+        font-size: 0.8rem;
+        font-weight: 600;
       }
       
       footer {
@@ -435,9 +459,19 @@ async function renderHome(tmdb, lang, tmdbLang) {
         border-top: 1px solid var(--border);
       }
       
-      @media (max-width: 968px) {
+      @media (max-width: 1200px) {
+        .shows-grid { grid-template-columns: repeat(3, 1fr); }
+      }
+      
+      @media (max-width: 900px) {
+        .shows-grid { grid-template-columns: repeat(2, 1fr); }
+      }
+      
+      @media (max-width: 600px) {
         .hero h1 { font-size: 2.5rem; }
-        .shows-grid { grid-template-columns: 1fr; }
+        .shows-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+        .show-info { padding: 12px; }
+        .show-title { font-size: 0.95rem; }
         .stats { flex-direction: column; gap: 24px; }
         .nav { padding: 0 24px; }
         .hero, .section { padding-left: 24px; padding-right: 24px; }
