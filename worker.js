@@ -1,294 +1,174 @@
-// Filler Tracker - Version complète avec TMDB/TVDB
-// Multilangue (FR/EN) avec guides filler
+// Filler Tracker - Version avec intégration TMDB API
+// Multilangue (FR/EN) avec guides filler et données réelles
 
 const SHOWS_DB = {
   'stargate-sg1': {
     tmdbId: 4629,
-    tvdbId: 72449,
     guides: {
       fr: {
         s1: [
-          { ep: 1, title: "Children of the Gods", type: "must-watch", desc: "Le pilote - Introduction complète" },
-          { ep: 2, title: "The Enemy Within", type: "optional", desc: "Kawalsky possédé - peut être skippé" },
-          { ep: 3, title: "Emancipation", type: "skip", desc: "Épisode très faible - skip recommandé" },
-          { ep: 4, title: "The Broca Divide", type: "important", desc: "Introduction du Dr Fraiser" },
-          { ep: 5, title: "The First Commandment", type: "optional", desc: "Filler sur une planète" },
-          { ep: 6, title: "Cold Lazarus", type: "important", desc: "Jack et son passé familial" },
-          { ep: 7, title: "The Nox", type: "optional", desc: "Découverte d'une race ancienne" },
-          { ep: 8, title: "Brief Candle", type: "must-watch", desc: "Excellente histoire autonome" },
-          { ep: 9, title: "Thor's Hammer", type: "important", desc: "Première mention de Thor" },
-          { ep: 10, title: "The Torment of Tantalus", type: "optional", desc: "Intéressant mais pas essentiel" },
-          { ep: 11, title: "Bloodlines", type: "important", desc: "Teal'c et sa famille" },
-          { ep: 12, title: "Fire and Water", type: "optional", desc: "Daniel capturé - skipable" },
-          { ep: 13, title: "Hathor", type: "skip", desc: "Épisode considéré comme le pire" },
-          { ep: 14, title: "Singularity", type: "must-watch", desc: "Cassandra - arc important" },
-          { ep: 15, title: "Cor-ai", type: "optional", desc: "Procès de Teal'c" },
-          { ep: 16, title: "Enigma", type: "optional", desc: "Les Tollans" },
-          { ep: 17, title: "Solitudes", type: "must-watch", desc: "Jack et Carter en Antarctique" },
-          { ep: 18, title: "Tin Man", type: "important", desc: "L'équipe dupliquée" },
-          { ep: 19, title: "There But for the Grace of God", type: "must-watch", desc: "Réalité alternative - Daniel" },
-          { ep: 20, title: "Politics", type: "clip", desc: "Clip show - skipable" },
-          { ep: 21, title: "Within the Serpent's Grasp", type: "must-watch", desc: "Finale saison 1 - attaque Goa'uld" }
+          { ep: 1, type: "must-watch", note: "Pilote - Introduction complète" },
+          { ep: 2, type: "optional", note: "Kawalsky possédé" },
+          { ep: 3, type: "skip", note: "Épisode très faible" },
+          { ep: 4, type: "important", note: "Introduction du Dr Fraiser" },
+          { ep: 5, type: "optional", note: "Filler planète" },
+          { ep: 6, type: "important", note: "Passé familial Jack" },
+          { ep: 7, type: "optional", note: "Race ancienne" },
+          { ep: 8, type: "must-watch", note: "Excellente histoire" },
+          { ep: 9, type: "important", note: "Première mention Thor" },
+          { ep: 10, type: "optional", note: "Intéressant" },
+          { ep: 11, type: "important", note: "Teal'c famille" },
+          { ep: 12, type: "optional", note: "Daniel capturé" },
+          { ep: 13, type: "skip", note: "Le pire épisode" },
+          { ep: 14, type: "must-watch", note: "Cassandra - arc important" },
+          { ep: 15, type: "optional", note: "Procès Teal'c" },
+          { ep: 16, type: "optional", note: "Les Tollans" },
+          { ep: 17, type: "must-watch", note: "Jack & Carter Antarctique" },
+          { ep: 18, type: "important", note: "Équipe dupliquée" },
+          { ep: 19, type: "must-watch", note: "Réalité alternative" },
+          { ep: 20, type: "skip", note: "Clip show" },
+          { ep: 21, type: "must-watch", note: "Finale saison 1" }
         ]
       },
       en: {
         s1: [
-          { ep: 1, title: "Children of the Gods", type: "must-watch", desc: "The pilot - complete introduction" },
-          { ep: 2, title: "The Enemy Within", type: "optional", desc: "Kawalsky possessed - skippable" },
-          { ep: 3, title: "Emancipation", type: "skip", desc: "Very weak episode - skip recommended" },
-          { ep: 4, title: "The Broca Divide", desc: "Introduction of Dr Fraiser", type: "important" },
-          { ep: 21, title: "Within the Serpent's Grasp", type: "must-watch", desc: "Season 1 finale - Goa'uld attack" }
+          { ep: 1, type: "must-watch", note: "Pilot - Complete introduction" },
+          { ep: 21, type: "must-watch", note: "Season 1 finale" }
         ]
       }
     }
   },
-  
-  'breaking-bad': {
-    tmdbId: 1396,
-    tvdbId: 81189,
-    guides: {
-      fr: {
-        s1: [
-          { ep: 1, title: "Pilot", type: "must-watch", desc: "Le début de tout" },
-          { ep: 2, title: "Cat's in the Bag...", type: "must-watch", desc: "Conséquences du premier meurtre" },
-          { ep: 3, title: "...And the Bag's in the River", type: "must-watch", desc: "Flashback crucial" }
-        ]
-      }
-    }
-  },
-  
-  'the-office': {
-    tmdbId: 2316,
-    tvdbId: 73244,
-    guides: {
-      fr: {
-        s1: [
-          { ep: 1, title: "Pilot", type: "must-watch", desc: "Introduction des personnages" },
-          { ep: 2, title: "Diversity Day", type: "must-watch", desc: "Classique absolu" }
-        ]
-      }
-    }
-  },
-  
-  'friends': {
-    tmdbId: 1668,
-    tvdbId: 77526,
-    guides: {
-      fr: {
-        s1: [
-          { ep: 1, title: "The One Where Monica Gets a Roommate", type: "must-watch", desc: "Le début de la série" }
-        ]
-      }
-    }
-  },
-  
-  'game-of-thrones': {
-    tmdbId: 1399,
-    tvdbId: 121361,
-    guides: {
-      fr: {
-        s1: [
-          { ep: 1, title: "Winter Is Coming", type: "must-watch", desc: "Le pilote épique" },
-          { ep: 9, title: "Baelor", type: "must-watch", desc: "Ned Stark..." }
-        ]
-      }
-    }
-  },
-  
-  'stranger-things': {
-    tmdbId: 66732,
-    tvdbId: 305288,
-    guides: {
-      fr: {
-        s1: [
-          { ep: 1, title: "The Vanishing of Will Byers", type: "must-watch", desc: "La disparition" }
-        ]
-      }
-    }
-  },
-  
-  'the-simpsons': {
-    tmdbId: 456,
-    tvdbId: 71663,
-    guides: {
-      fr: {
-        s1: [
-          { ep: 1, title: "Simpsons Roasting on an Open Fire", type: "must-watch", desc: "Premier épisode" }
-        ]
-      }
-    }
-  },
-  
-  'sherlock': {
-    tmdbId: 19885,
-    tvdbId: 176941,
-    guides: {
-      fr: {
-        s1: [
-          { ep: 1, title: "A Study in Pink", type: "must-watch", desc: "Introduction moderne de Sherlock" }
-        ]
-      }
-    }
-  }
+  'breaking-bad': { tmdbId: 1396 },
+  'the-office': { tmdbId: 2316 },
+  'friends': { tmdbId: 1668 },
+  'game-of-thrones': { tmdbId: 1399 },
+  'stranger-things': { tmdbId: 66732 },
+  'the-simpsons': { tmdbId: 456 },
+  'sherlock': { tmdbId: 19885 }
 };
+
+// TMDB API client
+class TMDB {
+  constructor(apiKey) {
+    this.apiKey = apiKey;
+    this.baseUrl = 'https://api.themoviedb.org/3';
+    this.imageBase = 'https://image.tmdb.org/t/p';
+  }
+  
+  async fetch(endpoint, lang = 'fr-FR') {
+    const url = `${this.baseUrl}${endpoint}?api_key=${this.apiKey}&language=${lang}`;
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`TMDB error: ${response.status}`);
+    return response.json();
+  }
+  
+  getPoster(path, size = 'w342') {
+    return path ? `${this.imageBase}/${size}${path}` : null;
+  }
+  
+  getBackdrop(path, size = 'w1280') {
+    return path ? `${this.imageBase}/${size}${path}` : null;
+  }
+  
+  async getShow(id, lang = 'fr-FR') {
+    return this.fetch(`/tv/${id}`, lang);
+  }
+  
+  async getSeason(showId, seasonNum, lang = 'fr-FR') {
+    return this.fetch(`/tv/${showId}/season/${seasonNum}`, lang);
+  }
+}
 
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
     const path = url.pathname;
     
-    // Get language preference from cookie or default to FR
+    // Get language preference
     const cookies = request.headers.get('Cookie') || '';
     const langMatch = cookies.match(/lang=(fr|en)/);
     const lang = langMatch ? langMatch[1] : 'fr';
+    const tmdbLang = lang === 'fr' ? 'fr-FR' : 'en-US';
     
-    // API Routes
-    if (path === '/api/shows') {
-      return getPopularShows(env, lang);
+    // Initialize TMDB client
+    const tmdb = new TMDB(env.TMDB_API_KEY);
+    
+    if (path === '/' || path === '/index.html') {
+      return renderHome(tmdb, lang, tmdbLang);
     }
     
-    if (path.startsWith('/api/show/')) {
-      const showId = path.split('/')[3];
-      return getShowDetails(showId, env, lang);
+    if (path.startsWith('/show/')) {
+      const showId = path.split('/')[2];
+      return renderShow(showId, tmdb, lang, tmdbLang);
     }
     
     if (path === '/api/set-language') {
       return setLanguage(request);
     }
     
-    // Page Routes
-    if (path === '/' || path === '/index.html') {
-      return renderHome(lang);
-    }
-    
-    if (path.startsWith('/show/')) {
-      const showId = path.split('/')[2];
-      return renderShow(showId, lang);
-    }
-    
     return new Response('Not Found', { status: 404 });
   }
 };
 
-async function getPopularShows(env, lang) {
-  const shows = Object.entries(SHOWS_DB).map(([id, data]) => ({
-    id,
-    tmdbId: data.tmdbId,
-    ...getBasicShowInfo(id, lang)
-  }));
-  
-  return new Response(JSON.stringify({ shows }), {
-    headers: { 'Content-Type': 'application/json' }
-  });
-}
-
-function getBasicShowInfo(showId, lang) {
-  const info = {
-    'stargate-sg1': {
-      fr: { name: 'Stargate SG-1', overview: 'Une équipe militaire explore la galaxie via des portes des étoiles.', year: 1997, seasons: 10, icon: '⭕' },
-      en: { name: 'Stargate SG-1', overview: 'A military team explores the galaxy through ancient stargates.', year: 1997, seasons: 10, icon: '⭕' }
-    },
-    'breaking-bad': {
-      fr: { name: 'Breaking Bad', overview: 'Un professeur de chimie devient fabricant de méthamphétamine.', year: 2008, seasons: 5, icon: '⚗️' },
-      en: { name: 'Breaking Bad', overview: 'A chemistry teacher turned methamphetamine manufacturer.', year: 2008, seasons: 5, icon: '⚗️' }
-    },
-    'the-office': {
-      fr: { name: 'The Office (US)', overview: 'La vie quotidienne au bureau Dunder Mifflin.', year: 2005, seasons: 9, icon: '💼' },
-      en: { name: 'The Office (US)', overview: 'Daily life at Dunder Mifflin office.', year: 2005, seasons: 9, icon: '💼' }
-    },
-    'friends': {
-      fr: { name: 'Friends', overview: 'Six amis vivant à New York.', year: 1994, seasons: 10, icon: '☕' },
-      en: { name: 'Friends', overview: 'Six friends living in New York.', year: 1994, seasons: 10, icon: '☕' }
-    },
-    'game-of-thrones': {
-      fr: { name: 'Game of Thrones', overview: 'La lutte pour le Trône de Fer dans les Sept Couronnes.', year: 2011, seasons: 8, icon: '🐉' },
-      en: { name: 'Game of Thrones', overview: 'The struggle for the Iron Throne in the Seven Kingdoms.', year: 2011, seasons: 8, icon: '🐉' }
-    },
-    'stranger-things': {
-      fr: { name: 'Stranger Things', overview: 'Disparitions mystérieuses dans une petite ville des années 80.', year: 2016, seasons: 4, icon: '🚲' },
-      en: { name: 'Stranger Things', overview: 'Mysterious disappearances in a small 80s town.', year: 2016, seasons: 4, icon: '🚲' }
-    },
-    'the-simpsons': {
-      fr: { name: 'Les Simpson', overview: 'La famille Simpson à Springfield.', year: 1989, seasons: 35, icon: '🍩' },
-      en: { name: 'The Simpsons', overview: 'The Simpson family in Springfield.', year: 1989, seasons: 35, icon: '🍩' }
-    },
-    'sherlock': {
-      fr: { name: 'Sherlock', overview: 'Sherlock Holmes dans le Londres moderne.', year: 2010, seasons: 4, icon: '🔍' },
-      en: { name: 'Sherlock', overview: 'Sherlock Holmes in modern London.', year: 2010, seasons: 4, icon: '🔍' }
-    }
-  };
-  
-  return info[showId]?.[lang] || info[showId]?.['en'];
-}
-
-async function getShowDetails(showId, env, lang) {
-  const show = SHOWS_DB[showId];
-  if (!show) {
-    return new Response(JSON.stringify({ error: 'Show not found' }), { status: 404 });
-  }
-  
-  const details = {
-    id: showId,
-    ...getBasicShowInfo(showId, lang),
-    guides: show.guides[lang] || show.guides['en']
-  };
-  
-  return new Response(JSON.stringify(details), {
-    headers: { 'Content-Type': 'application/json' }
-  });
-}
-
-function setLanguage(request) {
-  const url = new URL(request.url);
-  const lang = url.searchParams.get('lang') || 'fr';
-  
-  return new Response(JSON.stringify({ success: true, lang }), {
-    headers: {
-      'Content-Type': 'application/json',
-      'Set-Cookie': `lang=${lang}; Path=/; Max-Age=31536000; SameSite=Strict`
-    }
-  });
-}
-
-function renderHome(lang) {
+async function renderHome(tmdb, lang, tmdbLang) {
   const t = {
     fr: {
       badge: 'Nouveau — Stargate SG-1 disponible',
       title: 'Ne perds plus de temps avec les épisodes inutiles',
       subtitle: 'Guides d\'épisodes complets avec notation must-watch, important et optionnel. Pour les séries qui en valent la peine.',
       cta: 'Explorer les séries →',
-      secondary: 'Comment ça marche',
       stats: { series: 'Séries référencées', episodes: 'Épisodes notés', price: 'Gratuit, toujours' },
       popular: 'Séries populaires',
       free: 'Tous les guides gratuits',
-      why: 'Pourquoi utiliser Filler Tracker',
-      features: [
-        { num: '01', title: 'Gagne du temps', desc: 'Skip les fillers qui n\'avancent pas l\'histoire. Concentre-toi sur l\'essentiel.' },
-        { num: '02', title: 'Notation claire', desc: 'Must-watch, Important, Optionnel. Chaque épisode est classé sans ambiguïté.' },
-        { num: '03', title: 'Gratuit', desc: 'Accès complet gratuit. Pas de pub intrusive, pas de paiement caché.' }
-      ],
       langLabel: 'FR'
     },
     en: {
       badge: 'New — Stargate SG-1 available',
       title: 'Stop wasting time on useless episodes',
-      subtitle: 'Complete episode guides with must-watch, important and optional ratings. For series worth your time.',
+      subtitle: 'Complete episode guides with must-watch, important and optional ratings.',
       cta: 'Browse shows →',
-      secondary: 'How it works',
       stats: { series: 'Shows referenced', episodes: 'Episodes rated', price: 'Free, always' },
       popular: 'Popular shows',
       free: 'All guides free',
-      why: 'Why use Filler Tracker',
-      features: [
-        { num: '01', title: 'Save time', desc: 'Skip fillers that don\'t advance the story. Focus on what matters.' },
-        { num: '02', title: 'Clear ratings', desc: 'Must-watch, Important, Optional. Every episode is clearly categorized.' },
-        { num: '03', title: 'Free', desc: 'Completely free access. No intrusive ads, no hidden payments.' }
-      ],
       langLabel: 'EN'
     }
   }[lang];
   
-  const shows = ['stargate-sg1', 'breaking-bad', 'the-office', 'friends', 'game-of-thrones', 'stranger-things'];
+  // Fetch real data from TMDB for all shows
+  const showIds = Object.keys(SHOWS_DB);
+  const showsData = [];
+  
+  for (const id of showIds) {
+    try {
+      const data = await tmdb.getShow(SHOWS_DB[id].tmdbId, tmdbLang);
+      showsData.push({
+        id,
+        name: data.name,
+        overview: data.overview,
+        poster: tmdb.getPoster(data.poster_path, 'w342'),
+        backdrop: tmdb.getBackdrop(data.backdrop_path, 'w780'),
+        year: data.first_air_date?.split('-')[0] || 'N/A',
+        seasons: data.number_of_seasons,
+        rating: data.vote_average?.toFixed(1),
+        genres: data.genres?.slice(0, 2).map(g => g.name).join(', ') || ''
+      });
+    } catch (e) {
+      console.error(`Failed to fetch ${id}:`, e);
+    }
+  }
+  
+  const showsHtml = showsData.map(show => `
+    <a href="/show/${show.id}" class="show-card">
+        <div class="show-poster" style="background-image: url('${show.poster || ''}'); background-size: cover; background-position: center;">
+            ${!show.poster ? '<span style="font-size: 3rem;">📺</span>' : ''}
+        </div>
+        <div class="show-info">
+            <h3 class="show-title">${show.name}</h3>
+            <p class="show-meta">${show.seasons} ${lang === 'fr' ? 'saisons' : 'seasons'} • ${show.year} • ⭐ ${show.rating}</p>
+            <span class="tag">${show.genres}</span>
+        </div>
+    </a>
+  `).join('');
   
   const html = `<!DOCTYPE html>
 <html lang="${lang}">
@@ -305,7 +185,7 @@ function renderHome(lang) {
         --surface-hover: #1a1a1a;
         --border: #222;
         --text: #f5f5f5;
-        --text-muted: #666;
+        --text-muted: #888;
         --accent: #ff6b35;
         --must-watch: #22c55e;
         --important: #f59e0b;
@@ -323,9 +203,7 @@ function renderHome(lang) {
       
       .nav {
         position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
+        top: 0; left: 0; right: 0;
         height: 64px;
         background: rgba(12, 12, 12, 0.95);
         backdrop-filter: blur(10px);
@@ -362,14 +240,6 @@ function renderHome(lang) {
       }
       
       .nav-links a:hover { color: var(--text); }
-      
-      .nav-cta {
-        background: var(--accent);
-        color: #000 !important;
-        padding: 8px 18px;
-        border-radius: 4px;
-        font-weight: 600;
-      }
       
       .lang-switch {
         background: var(--surface);
@@ -416,11 +286,6 @@ function renderHome(lang) {
         margin-bottom: 40px;
       }
       
-      .hero-buttons {
-        display: flex;
-        gap: 16px;
-      }
-      
       .btn {
         padding: 14px 28px;
         border-radius: 4px;
@@ -437,16 +302,6 @@ function renderHome(lang) {
         background: var(--accent);
         color: #000;
       }
-      
-      .btn-primary:hover { background: #ff8555; }
-      
-      .btn-secondary {
-        background: transparent;
-        color: var(--text);
-        border: 1px solid var(--border);
-      }
-      
-      .btn-secondary:hover { background: var(--surface); }
       
       .stats {
         display: flex;
@@ -497,7 +352,7 @@ function renderHome(lang) {
       .show-card {
         background: var(--surface);
         border: 1px solid var(--border);
-        border-radius: 8px;
+        border-radius: 12px;
         overflow: hidden;
         text-decoration: none;
         color: var(--text);
@@ -510,16 +365,15 @@ function renderHome(lang) {
       }
       
       .show-poster {
-        height: 160px;
+        height: 280px;
         background: linear-gradient(135deg, #1a1a1a 0%, #0c0c0c 100%);
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 3rem;
         border-bottom: 1px solid var(--border);
       }
       
-      .show-info { padding: 24px; }
+      .show-info { padding: 20px; }
       
       .show-title {
         font-family: 'Space Grotesk', sans-serif;
@@ -531,7 +385,7 @@ function renderHome(lang) {
       .show-meta {
         color: var(--text-muted);
         font-size: 0.85rem;
-        margin-bottom: 16px;
+        margin-bottom: 12px;
       }
       
       .tag {
@@ -544,31 +398,6 @@ function renderHome(lang) {
         color: var(--text-muted);
       }
       
-      .features {
-        background: var(--surface);
-        border-top: 1px solid var(--border);
-        border-bottom: 1px solid var(--border);
-      }
-      
-      .features-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 48px;
-      }
-      
-      .feature h3 {
-        font-family: 'Space Grotesk', sans-serif;
-        font-size: 1.1rem;
-        margin-bottom: 8px;
-      }
-      
-      .feature h3 span {
-        color: var(--accent);
-        margin-right: 12px;
-      }
-      
-      .feature p { color: var(--text-muted); font-size: 0.95rem; }
-      
       footer {
         padding: 48px;
         text-align: center;
@@ -580,7 +409,6 @@ function renderHome(lang) {
       @media (max-width: 968px) {
         .hero h1 { font-size: 2.5rem; }
         .shows-grid { grid-template-columns: 1fr; }
-        .features-grid { grid-template-columns: 1fr; }
         .stats { flex-direction: column; gap: 24px; }
         .nav { padding: 0 24px; }
         .hero, .section { padding-left: 24px; padding-right: 24px; }
@@ -601,25 +429,13 @@ function renderHome(lang) {
         <div class="badge">${t.badge}</div>
         <h1>${t.title}</h1>
         <p>${t.subtitle}</p>
-        <div class="hero-buttons">
-            <a href="#shows" class="btn btn-primary">${t.cta}</a>
-            <a href="#features" class="btn btn-secondary">${t.secondary}</a>
-        </div>
+        <a href="#shows" class="btn btn-primary">${t.cta}</a>
     </section>
 
     <div class="stats">
-        <div class="stat">
-            <h3>8</h3>
-            <p>${t.stats.series}</p>
-        </div>
-        <div class="stat">
-            <h3>500+</h3>
-            <p>${t.stats.episodes}</p>
-        </div>
-        <div class="stat">
-            <h3>0$</h3>
-            <p>${t.stats.price}</p>
-        </div>
+        <div class="stat"><h3>${showsData.length}</h3><p>${t.stats.series}</p></div>
+        <div class="stat"><h3>500+</h3><p>${t.stats.episodes}</p></div>
+        <div class="stat"><h3>0$</h3><p>${t.stats.price}</p></div>
     </div>
 
     <section class="section" id="shows">
@@ -627,43 +443,18 @@ function renderHome(lang) {
             <h2>${t.popular} <span>— ${t.free}</span></h2>
         </div>
         <div class="shows-grid">
-            ${shows.map(id => {
-              const info = getBasicShowInfo(id, lang);
-              return `
-            <a href="/show/${id}" class="show-card">
-                <div class="show-poster">${info.icon}</div>
-                <div class="show-info">
-                    <h3 class="show-title">${info.name}</h3>
-                    <p class="show-meta">${info.seasons} ${lang === 'fr' ? 'saisons' : 'seasons'} • ${info.year}</p>
-                </div>
-            </a>`;
-            }).join('')}
-        </div>
-    </section>
-
-    <section class="section features" id="features">
-        <div class="section-header">
-            <h2>${t.why}</h2>
-        </div>
-        <div class="features-grid">
-            ${t.features.map(f => `
-            <div class="feature">
-                <h3><span>${f.num}</span>${f.title}</h3>
-                <p>${f.desc}</p>
-            </div>`).join('')}
+            ${showsHtml}
         </div>
     </section>
 
     <footer>
-        <p>© 2026 Filler Tracker — TMDB & TVDB</p>
+        <p>© 2026 Filler Tracker — Données TMDB</p>
     </footer>
     
     <script>
         function toggleLang() {
-            const currentLang = document.documentElement.lang;
-            const newLang = currentLang === 'fr' ? 'en' : 'fr';
-            fetch('/api/set-language?lang=' + newLang)
-                .then(() => location.reload());
+            const newLang = document.documentElement.lang === 'fr' ? 'en' : 'fr';
+            fetch('/api/set-language?lang=' + newLang).then(() => location.reload());
         }
     </script>
 </body>
@@ -672,11 +463,8 @@ function renderHome(lang) {
   return new Response(html, { headers: { 'Content-Type': 'text/html; charset=utf-8' } });
 }
 
-function renderShow(showId, lang) {
-  // Show detail page with episodes guide
+async function renderShow(showId, tmdb, lang, tmdbLang) {
   const show = SHOWS_DB[showId];
-  const info = getBasicShowInfo(showId, lang);
-  
   if (!show) return new Response('Show not found', { status: 404 });
   
   const t = {
@@ -684,30 +472,79 @@ function renderShow(showId, lang) {
     en: { back: '← Back', guide: 'Episode Guide', mustWatch: 'Must Watch', important: 'Important', optional: 'Optional', skip: 'Skip' }
   }[lang];
   
-  const guides = show.guides[lang] || show.guides['en'];
-  const s1 = guides?.s1 || [];
+  // Fetch show data from TMDB
+  let showData, seasonData;
+  try {
+    showData = await tmdb.getShow(show.tmdbId, tmdbLang);
+    seasonData = await tmdb.getSeason(show.tmdbId, 1, tmdbLang);
+  } catch (e) {
+    return new Response('Error fetching data', { status: 500 });
+  }
   
-  const typeLabels = {
-    'must-watch': t.mustWatch,
-    'important': t.important,
-    'optional': t.optional,
-    'skip': t.skip,
-    'clip': 'Clip'
-  };
+  const backdrop = tmdb.getBackdrop(showData.backdrop_path, 'w1280');
+  const poster = tmdb.getPoster(showData.poster_path, 'w342');
+  
+  // Merge TMDB episodes with our guides
+  const guides = show.guides?.[lang] || show.guides?.['en'] || {};
+  const guideMap = new Map((guides.s1 || []).map(g => [g.ep, g]));
+  
+  const episodes = (seasonData.episodes || []).map(ep => {
+    const guide = guideMap.get(ep.episode_number);
+    return {
+      number: ep.episode_number,
+      title: ep.name,
+      overview: ep.overview,
+      still: tmdb.getPoster(ep.still_path, 'w300'),
+      airDate: ep.air_date,
+      type: guide?.type || 'unknown',
+      note: guide?.note || ''
+    };
+  });
   
   const typeColors = {
     'must-watch': '#22c55e',
     'important': '#f59e0b',
     'optional': '#ef4444',
     'skip': '#666',
-    'clip': '#3b82f6'
+    'clip': '#3b82f6',
+    'unknown': '#444'
   };
+  
+  const typeLabels = {
+    'must-watch': t.mustWatch,
+    'important': t.important,
+    'optional': t.optional,
+    'skip': t.skip,
+    'clip': 'Clip',
+    'unknown': lang === 'fr' ? 'Non classé' : 'Unrated'
+  };
+  
+  const episodesHtml = episodes.map(ep => `
+    <div class="episode">
+        <div class="ep-still" style="background-image: url('${ep.still || ''}')">
+            ${!ep.still ? `<span class="ep-number-fallback">${ep.number}</span>` : ''}
+        </div>
+        <div class="ep-content">
+            <div class="ep-header">
+                <div>
+                    <span class="ep-num">S1E${ep.number}</span>
+                    <h3 class="ep-title">${ep.title}</h3>
+                </div>
+                <span class="ep-badge" style="background: ${typeColors[ep.type]}20; color: ${typeColors[ep.type]}; border: 1px solid ${typeColors[ep.type]}40;">
+                    ${typeLabels[ep.type]}
+                </span>
+            </div>
+            <p class="ep-overview">${ep.overview || (lang === 'fr' ? 'Aucun résumé disponible' : 'No overview available')}</p>
+            ${ep.note ? `<p class="ep-note">💡 ${ep.note}</p>` : ''}
+        </div>
+    </div>
+  `).join('');
   
   const html = `<!DOCTYPE html>
 <html lang="${lang}">
 <head>
     <meta charset="UTF-8">
-    <title>${info.name} — Filler Tracker</title>
+    <title>${showData.name} — Filler Tracker</title>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
     <style>
       :root {
@@ -716,11 +553,8 @@ function renderShow(showId, lang) {
         --surface-hover: #1a1a1a;
         --border: #222;
         --text: #f5f5f5;
-        --text-muted: #666;
+        --text-muted: #888;
         --accent: #ff6b35;
-        --must-watch: #22c55e;
-        --important: #f59e0b;
-        --optional: #ef4444;
       }
       
       * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -734,9 +568,7 @@ function renderShow(showId, lang) {
       
       .nav {
         position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
+        top: 0; left: 0; right: 0;
         height: 64px;
         background: rgba(12, 12, 12, 0.95);
         backdrop-filter: blur(10px);
@@ -762,15 +594,28 @@ function renderShow(showId, lang) {
         color: var(--text-muted);
         text-decoration: none;
         font-size: 0.9rem;
-        font-weight: 500;
       }
       
-      .nav-links a:hover { color: var(--text); }
+      .hero-backdrop {
+        height: 400px;
+        background-size: cover;
+        background-position: center;
+        position: relative;
+      }
+      
+      .hero-backdrop::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to bottom, rgba(12,12,12,0.3) 0%, var(--bg) 100%);
+      }
       
       .container {
         max-width: 900px;
-        margin: 0 auto;
-        padding: 100px 48px 48px;
+        margin: -100px auto 0;
+        padding: 0 48px 48px;
+        position: relative;
+        z-index: 10;
       }
       
       .back-link {
@@ -783,38 +628,32 @@ function renderShow(showId, lang) {
         font-size: 0.9rem;
       }
       
-      .back-link:hover { color: var(--text); }
-      
       .show-header {
         display: flex;
         gap: 32px;
         margin-bottom: 48px;
-        padding-bottom: 48px;
-        border-bottom: 1px solid var(--border);
       }
       
-      .show-icon {
-        width: 120px;
-        height: 120px;
-        background: var(--surface);
+      .show-poster {
+        width: 200px;
+        height: 300px;
         border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 4rem;
+        background-size: cover;
+        background-position: center;
         border: 1px solid var(--border);
+        flex-shrink: 0;
       }
       
       .show-info h1 {
         font-family: 'Space Grotesk', sans-serif;
-        font-size: 2.5rem;
-        margin-bottom: 12px;
+        font-size: 3rem;
+        margin-bottom: 16px;
       }
       
       .show-info p {
         color: var(--text-muted);
         margin-bottom: 16px;
-        max-width: 500px;
+        line-height: 1.7;
       }
       
       .meta {
@@ -822,35 +661,31 @@ function renderShow(showId, lang) {
         gap: 24px;
         font-size: 0.9rem;
         color: var(--text-muted);
+        margin-bottom: 16px;
       }
       
-      .filter-tabs {
-        display: flex;
-        gap: 12px;
-        margin-bottom: 32px;
-      }
-      
-      .filter-btn {
-        padding: 8px 16px;
+      .rating {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
         background: var(--surface);
-        border: 1px solid var(--border);
-        border-radius: 4px;
-        color: var(--text-muted);
-        font-size: 0.85rem;
-        cursor: pointer;
-        transition: all 0.2s;
+        padding: 8px 16px;
+        border-radius: 6px;
+        font-weight: 600;
       }
       
-      .filter-btn:hover, .filter-btn.active {
-        background: var(--accent);
-        color: #000;
-        border-color: var(--accent);
+      .season-title {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 1.5rem;
+        margin: 48px 0 24px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid var(--border);
       }
       
       .episodes-list {
         display: flex;
         flex-direction: column;
-        gap: 12px;
+        gap: 16px;
       }
       
       .episode {
@@ -859,7 +694,7 @@ function renderShow(showId, lang) {
         padding: 20px;
         background: var(--surface);
         border: 1px solid var(--border);
-        border-radius: 8px;
+        border-radius: 12px;
         transition: all 0.2s;
       }
       
@@ -868,34 +703,49 @@ function renderShow(showId, lang) {
         background: var(--surface-hover);
       }
       
-      .ep-number {
-        width: 48px;
-        height: 48px;
+      .ep-still {
+        width: 160px;
+        height: 90px;
         background: var(--bg);
         border-radius: 8px;
+        background-size: cover;
+        background-position: center;
+        flex-shrink: 0;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-family: 'Space Grotesk', sans-serif;
-        font-weight: 700;
-        font-size: 1.1rem;
-        flex-shrink: 0;
       }
       
-      .ep-info {
+      .ep-number-fallback {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--text-muted);
+      }
+      
+      .ep-content {
         flex: 1;
+      }
+      
+      .ep-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 12px;
+      }
+      
+      .ep-num {
+        color: var(--accent);
+        font-weight: 600;
+        font-size: 0.85rem;
+        margin-right: 8px;
       }
       
       .ep-title {
         font-family: 'Space Grotesk', sans-serif;
         font-size: 1.1rem;
         font-weight: 600;
-        margin-bottom: 6px;
-      }
-      
-      .ep-desc {
-        color: var(--text-muted);
-        font-size: 0.9rem;
+        display: inline;
       }
       
       .ep-badge {
@@ -907,21 +757,28 @@ function renderShow(showId, lang) {
         font-weight: 600;
         text-transform: uppercase;
         letter-spacing: 0.5px;
-        height: fit-content;
       }
       
-      .season-header {
-        font-family: 'Space Grotesk', sans-serif;
-        font-size: 1.5rem;
-        margin: 48px 0 24px;
-        padding-bottom: 16px;
-        border-bottom: 1px solid var(--border);
+      .ep-overview {
+        color: var(--text-muted);
+        font-size: 0.95rem;
+        line-height: 1.6;
+        margin-bottom: 8px;
+      }
+      
+      .ep-note {
+        color: var(--accent);
+        font-size: 0.9rem;
+        font-style: italic;
       }
       
       @media (max-width: 768px) {
-        .container { padding: 100px 24px 48px; }
+        .container { padding: 0 24px 48px; }
         .show-header { flex-direction: column; }
-        .show-icon { width: 80px; height: 80px; font-size: 2.5rem; }
+        .show-poster { width: 150px; height: 225px; }
+        .show-info h1 { font-size: 2rem; }
+        .episode { flex-direction: column; }
+        .ep-still { width: 100%; height: 140px; }
       }
     </style>
 </head>
@@ -933,44 +790,31 @@ function renderShow(showId, lang) {
         </div>
     </nav>
     
+    <div class="hero-backdrop" style="background-image: url('${backdrop || poster}')"></div>
+    
     <div class="container">
         <a href="/" class="back-link">${t.back}</a>
         
         <div class="show-header">
-            <div class="show-icon">${info.icon}</div>
+            <div class="show-poster" style="background-image: url('${poster}')"></div>
             <div class="show-info">
-                <h1>${info.name}</h1>
-                <p>${info.overview}</p>
+                <h1>${showData.name}</h1>
+                <p>${showData.overview}</p>
                 <div class="meta">
-                    <span>${info.seasons} ${lang === 'fr' ? 'saisons' : 'seasons'}</span>
+                    <span>${showData.number_of_seasons} ${lang === 'fr' ? 'saisons' : 'seasons'}</span>
                     <span>•</span>
-                    <span>${info.year}</span>
+                    <span>${showData.first_air_date?.split('-')[0] || 'N/A'}</span>
+                    <span>•</span>
+                    <span>${showData.genres?.map(g => g.name).join(', ')}</span>
                 </div>
+                <div class="rating">⭐ ${showData.vote_average?.toFixed(1)} / 10</div>
             </div>
         </div>
         
-        <h2 class="season-header">${t.guide} — ${lang === 'fr' ? 'Saison 1' : 'Season 1'}</h2>
-        
-        <div class="filter-tabs">
-            <button class="filter-btn active">${lang === 'fr' ? 'Tous' : 'All'}</button>
-            <button class="filter-btn">${t.mustWatch}</button>
-            <button class="filter-btn">${t.important}</button>
-            <button class="filter-btn">${t.optional}</button>
-        </div>
+        <h2 class="season-title">${t.guide} — ${lang === 'fr' ? 'Saison 1' : 'Season 1'}</h2>
         
         <div class="episodes-list">
-            ${s1.map(ep => `
-            <div class="episode">
-                <div class="ep-number">${ep.ep}</div>
-                <div class="ep-info">
-                    <div class="ep-title">${ep.title}</div>
-                    <div class="ep-desc">${ep.desc}</div>
-                </div>
-                <span class="ep-badge" style="background: ${typeColors[ep.type]}20; color: ${typeColors[ep.type]}; border: 1px solid ${typeColors[ep.type]}40;">
-                    ${typeLabels[ep.type]}
-                </span>
-            </div>
-            `).join('')}
+            ${episodesHtml}
         </div>
     </div>
 </body>
@@ -979,4 +823,14 @@ function renderShow(showId, lang) {
   return new Response(html, { headers: { 'Content-Type': 'text/html; charset=utf-8' } });
 }
 
-// All content is free - no login required
+function setLanguage(request) {
+  const url = new URL(request.url);
+  const lang = url.searchParams.get('lang') || 'fr';
+  
+  return new Response(JSON.stringify({ success: true, lang }), {
+    headers: {
+      'Content-Type': 'application/json',
+      'Set-Cookie': `lang=${lang}; Path=/; Max-Age=31536000; SameSite=Strict`
+    }
+  });
+}
