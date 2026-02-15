@@ -2,13 +2,16 @@ name = "filler-tracker"
 main = "worker.js"
 compatibility_date = "2024-01-01"
 
-# D1 Database for users and tracking
-[[d1_databases]]
-binding = "DB"
-database_name = "filler-tracker-db"
-database_id = "your-database-id-here"
+# NOTE: Create these resources to enable persistence:
+# wrangler d1 create filler-tracker-db
+# wrangler kv:namespace create SESSIONS
+# Then update the bindings below with real IDs
 
-# KV for sessions
-[[kv_namespaces]]
-binding = "SESSIONS"
-id = "your-kv-id-here"
+# [[d1_databases]]
+# binding = "DB"
+# database_name = "filler-tracker-db"
+# database_id = "your-database-id-here"
+
+# [[kv_namespaces]]
+# binding = "SESSIONS"
+# id = "your-kv-id-here"
