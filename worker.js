@@ -189,7 +189,7 @@ async function renderHome(tmdb, lang, tmdbLang) {
   const showsHtml = showsData.map(show => `
     <a href="/show/${show.id}" class="show-card">
         <div class="show-poster" style="background-image: url('${show.poster || ''}');">
-            ${!show.poster ? '<span style="font-size: 3rem; z-index: 1;">📺</span>' : ''}
+            ${!show.poster ? '<span style="font-size: 3rem;">📺</span>' : ''}
         </div>
         <div class="show-info">
             <h3 class="show-title">${show.name}</h3>
@@ -379,58 +379,52 @@ async function renderHome(tmdb, lang, tmdbLang) {
       }
       
       .show-card {
-        position: relative;
-        border-radius: 8px;
-        overflow: hidden;
+        display: flex;
+        flex-direction: column;
         text-decoration: none;
         color: var(--text);
         transition: all 0.3s ease;
-        aspect-ratio: 2/3;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.4);
       }
       
       .show-card:hover {
-        transform: translateY(-8px) scale(1.02);
+        transform: translateY(-8px);
+      }
+      
+      .show-card:hover .show-poster {
         box-shadow: 0 12px 40px rgba(0,0,0,0.5);
       }
       
       .show-poster {
-        position: absolute;
-        inset: 0;
+        aspect-ratio: 2/3;
+        border-radius: 8px;
         background-size: cover;
         background-position: center;
         display: flex;
         align-items: center;
         justify-content: center;
-      }
-      
-      .show-poster::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(to top, 
-          rgba(12,12,12,0.95) 0%, 
-          rgba(12,12,12,0.7) 40%,
-          transparent 70%);
+        box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+        transition: box-shadow 0.3s ease;
+        overflow: hidden;
       }
       
       .show-info {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        padding: 20px;
-        background: rgba(20, 20, 20, 0.4);
-        backdrop-filter: blur(10px);
-        border-top: 1px solid rgba(255,255,255,0.08);
+        margin-top: 12px;
+        padding: 16px;
+        background: rgba(30, 30, 30, 0.6);
+        backdrop-filter: blur(12px);
+        border-radius: 12px;
+        border: 1px solid rgba(255,255,255,0.06);
       }
       
       .show-title {
         font-family: 'Space Grotesk', sans-serif;
-        font-size: 1.1rem;
+        font-size: 1rem;
         font-weight: 600;
-        margin-bottom: 6px;
+        margin-bottom: 4px;
         line-height: 1.3;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
       
       .show-meta {
@@ -443,7 +437,7 @@ async function renderHome(tmdb, lang, tmdbLang) {
         display: inline-flex;
         align-items: center;
         gap: 4px;
-        background: rgba(255,107,53,0.2);
+        background: rgba(255,107,53,0.15);
         color: var(--accent);
         padding: 4px 10px;
         border-radius: 4px;
@@ -470,8 +464,11 @@ async function renderHome(tmdb, lang, tmdbLang) {
       @media (max-width: 600px) {
         .hero h1 { font-size: 2.5rem; }
         .shows-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-        .show-info { padding: 12px; }
-        .show-title { font-size: 0.95rem; }
+        .show-info { padding: 10px; margin-top: 8px; }
+        .show-info { border-radius: 8px; }
+        .show-title { font-size: 0.85rem; }
+        .show-meta { font-size: 0.75rem; }
+        .show-rating { font-size: 0.7rem; padding: 2px 6px; }
         .stats { flex-direction: column; gap: 24px; }
         .nav { padding: 0 24px; }
         .hero, .section { padding-left: 24px; padding-right: 24px; }
