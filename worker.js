@@ -193,8 +193,7 @@ async function renderHome(tmdb, lang, tmdbLang) {
         </div>
         <div class="show-info">
             <h3 class="show-title">${show.name}</h3>
-            <p class="show-meta">${show.year} • ${show.seasons} ${lang === 'fr' ? 'saisons' : 'seasons'}</p>
-            <span class="show-rating">⭐ ${show.rating}</span>
+            <p class="show-meta">${show.year} • ${show.seasons}S <span class="show-rating-inline">⭐ ${show.rating}</span></p>
         </div>
     </a>
   `).join('');
@@ -430,18 +429,13 @@ async function renderHome(tmdb, lang, tmdbLang) {
       .show-meta {
         color: var(--text-muted);
         font-size: 0.8rem;
-        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
       }
       
-      .show-rating {
-        display: inline-flex;
-        align-items: center;
-        gap: 4px;
-        background: rgba(255,107,53,0.15);
+      .show-rating-inline {
         color: var(--accent);
-        padding: 4px 10px;
-        border-radius: 4px;
-        font-size: 0.8rem;
         font-weight: 600;
       }
       
@@ -464,11 +458,9 @@ async function renderHome(tmdb, lang, tmdbLang) {
       @media (max-width: 600px) {
         .hero h1 { font-size: 2.5rem; }
         .shows-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-        .show-info { padding: 10px; margin-top: 8px; }
-        .show-info { border-radius: 8px; }
+        .show-info { padding: 10px; margin-top: 8px; border-radius: 8px; }
         .show-title { font-size: 0.85rem; }
-        .show-meta { font-size: 0.75rem; }
-        .show-rating { font-size: 0.7rem; padding: 2px 6px; }
+        .show-meta { font-size: 0.7rem; gap: 6px; }
         .stats { flex-direction: column; gap: 24px; }
         .nav { padding: 0 24px; }
         .hero, .section { padding-left: 24px; padding-right: 24px; }
