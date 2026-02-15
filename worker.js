@@ -67,7 +67,85 @@ const SHOWS_DB = {
       }
     }
   },
-  'breaking-bad': { tmdbId: 1396 },
+  'breaking-bad': {
+    tmdbId: 1396,
+    guides: {
+      fr: {
+        s1: [
+          { ep: 1, type: "must-watch", note: "Pilot - Le début de tout" },
+          { ep: 2, type: "must-watch", note: "Cat's in the Bag..." },
+          { ep: 3, type: "must-watch", note: "...And the Bag's in the River" },
+          { ep: 4, type: "important", note: "Cancer Man" },
+          { ep: 5, type: "must-watch", note: "Gray Matter" },
+          { ep: 6, type: "must-watch", note: "Crazy Handful of Nothin'" },
+          { ep: 7, type: "must-watch", note: "A No-Rough-Stuff-Type Deal" }
+        ],
+        s2: [
+          { ep: 1, type: "must-watch", note: "Seven Thirty-Seven" },
+          { ep: 2, type: "must-watch", note: "Grilled" },
+          { ep: 3, type: "must-watch", note: "Bit by a Dead Bee" },
+          { ep: 4, type: "must-watch", note: "Down" },
+          { ep: 5, type: "important", note: "Breakage" },
+          { ep: 6, type: "must-watch", note: "Peekaboo" },
+          { ep: 7, type: "important", note: "Negro y Azul" },
+          { ep: 8, type: "must-watch", note: "Better Call Saul" },
+          { ep: 9, type: "important", note: "4 Days Out" },
+          { ep: 10, type: "must-watch", note: "Over" },
+          { ep: 11, type: "must-watch", note: "Mandala" },
+          { ep: 12, type: "must-watch", note: "Phoenix" },
+          { ep: 13, type: "must-watch", note: "ABQ" }
+        ],
+        s3: [
+          { ep: 1, type: "must-watch", note: "No Más" },
+          { ep: 2, type: "must-watch", note: "Caballo Sin Nombre" },
+          { ep: 3, type: "must-watch", note: "IFT" },
+          { ep: 4, type: "must-watch", note: "Green Light" },
+          { ep: 5, type: "must-watch", note: "Más" },
+          { ep: 6, type: "must-watch", note: "Sunset" },
+          { ep: 7, type: "must-watch", note: "One Minute" },
+          { ep: 8, type: "must-watch", note: "I See You" },
+          { ep: 9, type: "must-watch", note: "Kafkaesque" },
+          { ep: 10, type: "must-watch", note: "Fly" },
+          { ep: 11, type: "must-watch", note: "Abiquiu" },
+          { ep: 12, type: "must-watch", note: "Half Measures" },
+          { ep: 13, type: "must-watch", note: "Full Measure" }
+        ],
+        s4: [
+          { ep: 1, type: "must-watch", note: "Box Cutter" },
+          { ep: 2, type: "must-watch", note: "Thirty-Eight Snub" },
+          { ep: 3, type: "must-watch", note: "Open House" },
+          { ep: 4, type: "must-watch", note: "Bullet Points" },
+          { ep: 5, type: "must-watch", note: "Shotgun" },
+          { ep: 6, type: "must-watch", note: "Cornered" },
+          { ep: 7, type: "must-watch", note: "Problem Dog" },
+          { ep: 8, type: "must-watch", note: "Hermanos" },
+          { ep: 9, type: "must-watch", note: "Bug" },
+          { ep: 10, type: "must-watch", note: "Salud" },
+          { ep: 11, type: "must-watch", note: "Crawl Space" },
+          { ep: 12, type: "must-watch", note: "End Times" },
+          { ep: 13, type: "must-watch", note: "Face Off" }
+        ],
+        s5: [
+          { ep: 1, type: "must-watch", note: "Live Free or Die" },
+          { ep: 2, type: "must-watch", note: "Madrigal" },
+          { ep: 3, type: "must-watch", note: "Hazard Pay" },
+          { ep: 4, type: "must-watch", note: "Fifty-One" },
+          { ep: 5, type: "must-watch", note: "Dead Freight" },
+          { ep: 6, type: "must-watch", note: "Buyout" },
+          { ep: 7, type: "must-watch", note: "Say My Name" },
+          { ep: 8, type: "must-watch", note: "Gliding Over All" },
+          { ep: 9, type: "must-watch", note: "Blood Money" },
+          { ep: 10, type: "must-watch", note: "Buried" },
+          { ep: 11, type: "must-watch", note: "Confessions" },
+          { ep: 12, type: "must-watch", note: "Rabid Dog" },
+          { ep: 13, type: "must-watch", note: "To'hajiilee" },
+          { ep: 14, type: "must-watch", note: "Ozymandias" },
+          { ep: 15, type: "must-watch", note: "Granite State" },
+          { ep: 16, type: "must-watch", note: "Felina" }
+        ]
+      }
+    }
+  },
   'the-office': { tmdbId: 2316 },
   'friends': { tmdbId: 1668 },
   'game-of-thrones': { tmdbId: 1399 },
@@ -128,7 +206,8 @@ export default {
     
     if (path.startsWith('/show/')) {
       const showId = path.split('/')[2];
-      return renderShow(showId, tmdb, lang, tmdbLang);
+      const seasonNum = parseInt(url.searchParams.get('season')) || 1;
+      return renderShow(showId, seasonNum, tmdb, lang, tmdbLang);
     }
     
     if (path === '/api/set-language') {
@@ -529,30 +608,37 @@ async function renderHome(tmdb, lang, tmdbLang) {
   return new Response(html, { headers: { 'Content-Type': 'text/html; charset=utf-8' } });
 }
 
-async function renderShow(showId, tmdb, lang, tmdbLang) {
+async function renderShow(showId, seasonNum, tmdb, lang, tmdbLang) {
   const show = SHOWS_DB[showId];
   if (!show) return new Response('Show not found', { status: 404 });
   
   const t = {
-    fr: { back: '← Retour', guide: 'Guide des épisodes', mustWatch: 'À voir', important: 'Important', optional: 'Optionnel', skip: 'Skip' },
-    en: { back: '← Back', guide: 'Episode Guide', mustWatch: 'Must Watch', important: 'Important', optional: 'Optional', skip: 'Skip' }
+    fr: { back: '← Retour', guide: 'Guide des épisodes', season: 'Saison', mustWatch: 'À voir', important: 'Important', optional: 'Optionnel', skip: 'Skip' },
+    en: { back: '← Back', guide: 'Episode Guide', season: 'Season', mustWatch: 'Must Watch', important: 'Important', optional: 'Optional', skip: 'Skip' }
   }[lang];
   
   // Fetch show data from TMDB
   let showData, seasonData;
   try {
     showData = await tmdb.getShow(show.tmdbId, tmdbLang);
-    seasonData = await tmdb.getSeason(show.tmdbId, 1, tmdbLang);
+    seasonData = await tmdb.getSeason(show.tmdbId, seasonNum, tmdbLang);
   } catch (e) {
     return new Response('Error fetching data', { status: 500 });
   }
   
   const backdrop = tmdb.getBackdrop(showData.backdrop_path, 'w1280');
   const poster = tmdb.getPoster(showData.poster_path, 'w342');
+  const totalSeasons = showData.number_of_seasons;
+  
+  // Build season selector
+  const seasonSelector = Array.from({ length: totalSeasons }, (_, i) => i + 1).map(s => `
+    <a href="/show/${showId}?season=${s}" class="season-btn ${s === seasonNum ? 'active' : ''}">${t.season} ${s}</a>
+  `).join('');
   
   // Merge TMDB episodes with our guides
   const guides = show.guides?.[lang] || show.guides?.['en'] || {};
-  const guideMap = new Map((guides.s1 || []).map(g => [g.ep, g]));
+  const seasonKey = `s${seasonNum}`;
+  const guideMap = new Map((guides[seasonKey] || []).map(g => [g.ep, g]));
   
   const episodes = (seasonData.episodes || []).map(ep => {
     const guide = guideMap.get(ep.episode_number);
@@ -593,7 +679,7 @@ async function renderShow(showId, tmdb, lang, tmdbLang) {
         <div class="ep-content">
             <div class="ep-header">
                 <div>
-                    <span class="ep-num">S1E${ep.number}</span>
+                    <span class="ep-num">S${seasonNum}E${ep.number}</span>
                     <h3 class="ep-title">${ep.title}</h3>
                 </div>
                 <span class="ep-badge" style="background: ${typeColors[ep.type]}20; color: ${typeColors[ep.type]}; border: 1px solid ${typeColors[ep.type]}40;">
@@ -863,11 +949,45 @@ async function renderShow(showId, tmdb, lang, tmdbLang) {
         color: var(--text-muted);
       }
       
+      .season-selector {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin: 32px 0 16px;
+        padding: 16px;
+        background: var(--surface);
+        border-radius: 12px;
+        border: 1px solid var(--border);
+      }
+      
+      .season-btn {
+        padding: 8px 16px;
+        background: transparent;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        color: var(--text-muted);
+        text-decoration: none;
+        font-size: 0.9rem;
+        font-weight: 500;
+        transition: all 0.2s;
+      }
+      
+      .season-btn:hover {
+        border-color: var(--accent);
+        color: var(--text);
+      }
+      
+      .season-btn.active {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: #000;
+      }
+      
       .season-header-row {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin: 48px 0 24px;
+        margin: 24px 0 24px;
         padding-bottom: 16px;
         border-bottom: 1px solid var(--border);
       }
@@ -926,8 +1046,12 @@ async function renderShow(showId, tmdb, lang, tmdbLang) {
             </div>
         </div>
         
+        <div class="season-selector">
+            ${seasonSelector}
+        </div>
+        
         <div class="season-header-row">
-            <h2 class="season-title" style="font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; margin: 0;">${t.guide} — ${lang === 'fr' ? 'Saison 1' : 'Season 1'}</h2>
+            <h2 class="season-title" style="font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; margin: 0;">${t.guide} — ${t.season} ${seasonNum}</h2>
             <button class="expand-all-btn" onclick="toggleAllEps()">${lang === 'fr' ? 'Tout déplier' : 'Expand all'}</button>
         </div>
         
