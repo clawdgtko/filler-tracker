@@ -1,0 +1,13 @@
+{
+  "name": "filler-tracker",
+  "version": "1.0.0",
+  "description": "Track filler episodes - Freemium with ads",
+  "main": "worker.js",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
+  }
+}
