@@ -38,6 +38,35 @@ const SHOWS_DB = {
       }
     }
   },
+  'stargate-atlantis': {
+    tmdbId: 2290,
+    guides: {
+      fr: {
+        s1: [
+          { ep: 1, type: "must-watch", note: "Rising (Partie 1) - Découverte d'Atlantis" },
+          { ep: 2, type: "must-watch", note: "Rising (Partie 2) - L'équipe piégée" },
+          { ep: 3, type: "important", note: "Hide and Seek - Premiers pas sur Atlantis" },
+          { ep: 4, type: "optional", note: "Thirty-Eight Minutes" },
+          { ep: 5, type: "important", note: "Suspicion - Qui espionne ?" },
+          { ep: 6, type: "must-watch", note: "Childhood's End - Société de jeunes" },
+          { ep: 7, type: "optional", note: "Poisoning the Well - Wraith découvert" },
+          { ep: 8, type: "optional", note: "Underground - Alliance Genii" },
+          { ep: 9, type: "optional", note: "Home - Illusions sur Terre" },
+          { ep: 10, type: "important", note: "The Storm - Tempête menace Atlantis" },
+          { ep: 11, type: "must-watch", note: "The Eye - Attaque Genii" },
+          { ep: 12, type: "optional", note: "The Defiant One - Wraith solitaire" },
+          { ep: 13, type: "optional", note: "Hot Zone - Virus mortel" },
+          { ep: 14, type: "important", note: "Sanctuary - Ascension possible" },
+          { ep: 15, type: "optional", note: "Before I Sleep - Ancienne Elizabeth" },
+          { ep: 16, type: "optional", note: "The Brotherhood - Clé ZPM" },
+          { ep: 17, type: "important", note: "Letters from Pegasus - Message vers Terre" },
+          { ep: 18, type: "skip", note: "The Gift - Exposition Wraith" },
+          { ep: 19, type: "important", note: "The Siege (Partie 1) - Wraith arrivent" },
+          { ep: 20, type: "must-watch", note: "The Siege (Partie 2) - Bataille finale" }
+        ]
+      }
+    }
+  },
   'breaking-bad': { tmdbId: 1396 },
   'the-office': { tmdbId: 2316 },
   'friends': { tmdbId: 1668 },
@@ -520,7 +549,7 @@ async function renderShow(showId, tmdb, lang, tmdbLang) {
   };
   
   const episodesHtml = episodes.map(ep => `
-    <div class="episode">
+    <div class="episode" data-expanded="false">
         <div class="ep-still" style="background-image: url('${ep.still || ''}')">
             ${!ep.still ? `<span class="ep-number-fallback">${ep.number}</span>` : ''}
         </div>
@@ -536,6 +565,7 @@ async function renderShow(showId, tmdb, lang, tmdbLang) {
             </div>
             <p class="ep-overview">${ep.overview || (lang === 'fr' ? 'Aucun résumé disponible' : 'No overview available')}</p>
             ${ep.note ? `<p class="ep-note">💡 ${ep.note}</p>` : ''}
+            <button class="ep-toggle" onclick="toggleEp(this)">${lang === 'fr' ? 'Voir plus' : 'Show more'}</button>
         </div>
     </div>
   `).join('');
@@ -674,14 +704,6 @@ async function renderShow(showId, tmdb, lang, tmdbLang) {
         font-weight: 600;
       }
       
-      .season-title {
-        font-family: 'Space Grotesk', sans-serif;
-        font-size: 1.5rem;
-        margin: 48px 0 24px;
-        padding-bottom: 16px;
-        border-bottom: 1px solid var(--border);
-      }
-      
       .episodes-list {
         display: flex;
         flex-direction: column;
@@ -772,6 +794,62 @@ async function renderShow(showId, tmdb, lang, tmdbLang) {
         font-style: italic;
       }
       
+      .ep-overview {
+        color: var(--text-muted);
+        font-size: 0.95rem;
+        line-height: 1.6;
+        margin-bottom: 8px;
+        max-height: 3.2em;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+      }
+      
+      .episode[data-expanded="true"] .ep-overview {
+        max-height: 500px;
+      }
+      
+      .ep-toggle {
+        background: transparent;
+        border: none;
+        color: var(--accent);
+        font-size: 0.85rem;
+        cursor: pointer;
+        padding: 4px 0;
+        font-weight: 500;
+      }
+      
+      .ep-toggle:hover {
+        text-decoration: underline;
+      }
+      
+      .episode[data-expanded="true"] .ep-toggle {
+        color: var(--text-muted);
+      }
+      
+      .season-header-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 48px 0 24px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid var(--border);
+      }
+      
+      .expand-all-btn {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        color: var(--text);
+        padding: 8px 16px;
+        border-radius: 6px;
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      
+      .expand-all-btn:hover {
+        border-color: var(--accent);
+      }
+      
       @media (max-width: 768px) {
         .container { padding: 0 24px 48px; }
         .show-header { flex-direction: column; }
@@ -811,12 +889,38 @@ async function renderShow(showId, tmdb, lang, tmdbLang) {
             </div>
         </div>
         
-        <h2 class="season-title">${t.guide} — ${lang === 'fr' ? 'Saison 1' : 'Season 1'}</h2>
+        <div class="season-header-row">
+            <h2 class="season-title" style="font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; margin: 0;">${t.guide} — ${lang === 'fr' ? 'Saison 1' : 'Season 1'}</h2>
+            <button class="expand-all-btn" onclick="toggleAllEps()">${lang === 'fr' ? 'Tout déplier' : 'Expand all'}</button>
+        </div>
         
         <div class="episodes-list">
             ${episodesHtml}
         </div>
     </div>
+    <script>
+        function toggleEp(btn) {
+            const episode = btn.closest('.episode');
+            const isExpanded = episode.getAttribute('data-expanded') === 'true';
+            episode.setAttribute('data-expanded', !isExpanded);
+            btn.textContent = isExpanded ? '${lang === 'fr' ? 'Voir plus' : 'Show more'}' : '${lang === 'fr' ? 'Voir moins' : 'Show less'}';
+        }
+        
+        let allExpanded = false;
+        function toggleAllEps() {
+            allExpanded = !allExpanded;
+            const episodes = document.querySelectorAll('.episode');
+            const btn = document.querySelector('.expand-all-btn');
+            episodes.forEach(ep => {
+                ep.setAttribute('data-expanded', allExpanded);
+                const toggleBtn = ep.querySelector('.ep-toggle');
+                if (toggleBtn) {
+                    toggleBtn.textContent = allExpanded ? '${lang === 'fr' ? 'Voir moins' : 'Show less'}' : '${lang === 'fr' ? 'Voir plus' : 'Show more'}';
+                }
+            });
+            btn.textContent = allExpanded ? '${lang === 'fr' ? 'Tout replier' : 'Collapse all'}' : '${lang === 'fr' ? 'Tout déplier' : 'Expand all'}';
+        }
+    </script>
 </body>
 </html>`;
 
