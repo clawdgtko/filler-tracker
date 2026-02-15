@@ -386,33 +386,47 @@ async function renderHome(tmdb, lang, tmdbLang) {
       }
       
       .show-card:hover {
-        transform: translateY(-8px);
+        transform: translateY(-4px);
       }
       
       .show-card:hover .show-poster {
-        box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+        box-shadow: 0 16px 50px rgba(0,0,0,0.5);
+        transform: scale(1.02);
+      }
+      
+      .show-card:hover .show-info {
+        background: rgba(40, 40, 40, 0.8);
+        border-color: rgba(255,107,53,0.2);
       }
       
       .show-poster {
         aspect-ratio: 2/3;
-        border-radius: 8px;
+        border-radius: 12px;
         background-size: cover;
         background-position: center;
         display: flex;
         align-items: center;
         justify-content: center;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-        transition: box-shadow 0.3s ease;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+        transition: all 0.3s ease;
         overflow: hidden;
+        position: relative;
+        z-index: 5;
       }
       
       .show-info {
-        margin-top: 12px;
+        margin-top: -20px;
+        margin-left: 8px;
+        margin-right: 8px;
         padding: 16px;
-        background: rgba(30, 30, 30, 0.6);
-        backdrop-filter: blur(12px);
+        padding-top: 24px;
+        background: rgba(30, 30, 30, 0.7);
+        backdrop-filter: blur(16px);
         border-radius: 12px;
-        border: 1px solid rgba(255,255,255,0.06);
+        border: 1px solid rgba(255,255,255,0.08);
+        position: relative;
+        z-index: 10;
+        box-shadow: 0 -4px 20px rgba(0,0,0,0.3);
       }
       
       .show-title {
