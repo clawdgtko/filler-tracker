@@ -3,25 +3,16 @@ export default {
         const url = new URL(request.url);
         const path = url.pathname;
         
-        // Home page
         if (path === '/' || path === '/index.html') {
             return serveHomePage();
         }
         
-        // Show page
         if (path.startsWith('/show/')) {
-            const showId = path.split('/')[2];
-            return serveShowPage(showId);
+            return serveShowPage(path.split('/')[2]);
         }
         
-        // Auth pages
-        if (path === '/login') {
-            return serveLoginPage();
-        }
-        
-        if (path === '/register') {
-            return serveRegisterPage();
-        }
+        if (path === '/login') return serveLoginPage();
+        if (path === '/register') return serveRegisterPage();
         
         return new Response('Not Found', { status: 404 });
     }
@@ -35,278 +26,231 @@ function serveHomePage() {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Filler Tracker - Guide d'épisodes</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-primary: #0a0a0f;
-            --bg-secondary: #12121a;
-            --bg-card: #1a1a25;
-            --bg-hover: #222230;
-            --accent: #6366f1;
-            --accent-light: #818cf8;
-            --success: #22c55e;
-            --warning: #f59e0b;
+            --bg: #0c0c0c;
+            --surface: #141414;
+            --surface-hover: #1a1a1a;
+            --border: #222;
+            --text: #f5f5f5;
+            --text-muted: #666;
+            --accent: #ff6b35;
+            --accent-2: #00d4aa;
             --danger: #ef4444;
-            --text-primary: #f8fafc;
-            --text-secondary: #94a3b8;
-            --text-muted: #64748b;
-            --border: rgba(255,255,255,0.08);
-            --gradient-1: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%);
-            --gradient-2: linear-gradient(135deg, #06b6d4 0%, #6366f1 100%);
+            --warning: #f59e0b;
         }
         
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
-            font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
+            font-family: 'Inter', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
             line-height: 1.6;
-            min-height: 100vh;
         }
         
-        .navbar {
+        /* Navigation minimaliste */
+        .nav {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            height: 70px;
-            background: rgba(10, 10, 15, 0.9);
-            backdrop-filter: blur(20px);
+            height: 64px;
+            background: rgba(12, 12, 12, 0.95);
+            backdrop-filter: blur(10px);
             border-bottom: 1px solid var(--border);
-            z-index: 1000;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 5%;
+            padding: 0 48px;
+            z-index: 100;
         }
         
         .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            text-decoration: none;
-            color: var(--text-primary);
-        }
-        
-        .logo-icon {
-            width: 40px;
-            height: 40px;
-            background: var(--gradient-1);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-        }
-        
-        .logo-text {
-            font-size: 1.3rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.4rem;
             font-weight: 700;
+            color: var(--text);
+            text-decoration: none;
+            letter-spacing: -0.5px;
         }
         
-        .logo-text span {
-            background: var(--gradient-1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+        .logo span { color: var(--accent); }
         
         .nav-links {
             display: flex;
+            gap: 40px;
             align-items: center;
-            gap: 30px;
         }
         
         .nav-links a {
-            color: var(--text-secondary);
+            color: var(--text-muted);
             text-decoration: none;
+            font-size: 0.9rem;
             font-weight: 500;
-            transition: color 0.3s;
-            font-size: 0.95rem;
+            transition: color 0.2s;
         }
         
-        .nav-links a:hover, .nav-links a.active {
-            color: var(--text-primary);
-        }
+        .nav-links a:hover { color: var(--text); }
         
         .nav-cta {
-            padding: 10px 24px;
-            background: var(--gradient-1);
-            border-radius: 10px;
-            color: white !important;
+            background: var(--accent);
+            color: #000 !important;
+            padding: 8px 20px;
+            border-radius: 4px;
             font-weight: 600;
-            transition: transform 0.3s, box-shadow 0.3s;
         }
         
-        .nav-cta:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
-        }
-        
+        /* Hero section sans gradient */
         .hero {
-            padding: 140px 5% 80px;
-            text-align: center;
-            background: radial-gradient(ellipse at top, rgba(99, 102, 241, 0.15) 0%, transparent 50%);
+            padding: 140px 48px 80px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
         
         .badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 16px;
-            background: rgba(99, 102, 241, 0.1);
-            border: 1px solid rgba(99, 102, 241, 0.3);
-            border-radius: 50px;
-            font-size: 0.85rem;
-            color: var(--accent-light);
+            display: inline-block;
+            padding: 6px 14px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 0.8rem;
+            color: var(--accent);
+            font-weight: 500;
             margin-bottom: 24px;
         }
         
         .hero h1 {
-            font-size: 4rem;
-            font-weight: 800;
-            line-height: 1.1;
-            margin-bottom: 20px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 4.5rem;
+            font-weight: 700;
+            line-height: 1.05;
+            letter-spacing: -2px;
+            margin-bottom: 24px;
             max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        
-        .hero h1 .gradient {
-            background: var(--gradient-1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
         }
         
         .hero p {
-            font-size: 1.25rem;
-            color: var(--text-secondary);
-            max-width: 600px;
-            margin: 0 auto 40px;
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            max-width: 500px;
+            margin-bottom: 40px;
         }
         
         .hero-buttons {
             display: flex;
             gap: 16px;
-            justify-content: center;
         }
         
         .btn {
-            padding: 14px 32px;
-            border-radius: 12px;
+            padding: 14px 28px;
+            border-radius: 4px;
             font-weight: 600;
             text-decoration: none;
-            transition: all 0.3s;
+            font-size: 0.95rem;
+            transition: all 0.2s;
             display: inline-flex;
             align-items: center;
-            gap: 10px;
-            font-size: 1rem;
+            gap: 8px;
         }
         
         .btn-primary {
-            background: var(--gradient-1);
-            color: white;
-            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+            background: var(--accent);
+            color: #000;
         }
         
         .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(99, 102, 241, 0.4);
+            background: #ff8555;
         }
         
         .btn-secondary {
-            background: var(--bg-card);
-            color: var(--text-primary);
+            background: transparent;
+            color: var(--text);
             border: 1px solid var(--border);
         }
         
         .btn-secondary:hover {
-            background: var(--bg-hover);
-            border-color: rgba(255,255,255,0.2);
+            background: var(--surface);
         }
         
-        .stats-bar {
+        /* Stats ligne fine */
+        .stats {
             display: flex;
-            justify-content: center;
-            gap: 60px;
-            padding: 40px 5%;
+            gap: 80px;
+            padding: 40px 48px;
             border-top: 1px solid var(--border);
             border-bottom: 1px solid var(--border);
+            max-width: 1200px;
+            margin: 0 auto;
         }
         
-        .stat {
-            text-align: center;
-        }
-        
-        .stat-value {
+        .stat h3 {
+            font-family: 'Space Grotesk', sans-serif;
             font-size: 2.5rem;
-            font-weight: 800;
-            background: var(--gradient-1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            color: var(--accent);
         }
         
-        .stat-label {
-            color: var(--text-secondary);
+        .stat p {
+            color: var(--text-muted);
             font-size: 0.9rem;
         }
         
+        /* Shows grid */
         .section {
-            padding: 80px 5%;
+            padding: 80px 48px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
         
         .section-header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 40px;
+            align-items: baseline;
+            margin-bottom: 48px;
         }
         
-        .section-title {
-            font-size: 2rem;
-            font-weight: 700;
+        .section h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.75rem;
+            font-weight: 600;
         }
         
-        .section-title span {
-            color: var(--text-secondary);
+        .section h2 span {
+            color: var(--text-muted);
             font-weight: 400;
         }
         
         .shows-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 24px;
         }
         
         .show-card {
-            background: var(--bg-card);
-            border-radius: 20px;
-            overflow: hidden;
+            background: var(--surface);
             border: 1px solid var(--border);
-            transition: all 0.3s;
+            border-radius: 8px;
+            overflow: hidden;
             text-decoration: none;
-            color: inherit;
+            color: var(--text);
+            transition: all 0.2s;
         }
         
         .show-card:hover {
-            transform: translateY(-8px);
-            border-color: rgba(99, 102, 241, 0.3);
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            border-color: var(--accent);
+            transform: translateY(-4px);
         }
         
         .show-poster {
-            height: 180px;
-            background: var(--gradient-2);
+            height: 160px;
+            background: linear-gradient(135deg, #1a1a1a 0%, #0c0c0c 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 4rem;
+            font-size: 3rem;
+            border-bottom: 1px solid var(--border);
         }
         
         .show-info {
@@ -314,218 +258,145 @@ function serveHomePage() {
         }
         
         .show-title {
-            font-size: 1.25rem;
-            font-weight: 700;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
             margin-bottom: 8px;
         }
         
         .show-meta {
-            display: flex;
-            gap: 16px;
-            color: var(--text-secondary);
-            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-size: 0.85rem;
             margin-bottom: 16px;
         }
         
-        .show-meta i {
-            margin-right: 6px;
-        }
-        
-        .show-tags {
-            display: flex;
-            gap: 8px;
-        }
-        
         .tag {
-            padding: 6px 12px;
-            background: rgba(99, 102, 241, 0.1);
-            border-radius: 20px;
-            font-size: 0.8rem;
-            color: var(--accent-light);
+            display: inline-block;
+            padding: 4px 10px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
         }
         
+        /* Features */
         .features {
-            background: var(--bg-secondary);
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
         }
         
         .features-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 32px;
-        }
-        
-        .feature {
-            text-align: center;
-            padding: 40px 24px;
-        }
-        
-        .feature-icon {
-            width: 70px;
-            height: 70px;
-            background: var(--gradient-1);
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 24px;
-            font-size: 1.8rem;
+            gap: 48px;
         }
         
         .feature h3 {
-            font-size: 1.25rem;
-            margin-bottom: 12px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+        
+        .feature h3 span {
+            color: var(--accent);
+            margin-right: 12px;
         }
         
         .feature p {
-            color: var(--text-secondary);
+            color: var(--text-muted);
             font-size: 0.95rem;
         }
         
+        /* Footer minimal */
         footer {
-            padding: 60px 5%;
-            border-top: 1px solid var(--border);
+            padding: 48px;
             text-align: center;
-        }
-        
-        .footer-logo {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            margin-bottom: 24px;
-            font-size: 1.3rem;
-            font-weight: 700;
-        }
-        
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-            margin-bottom: 30px;
-        }
-        
-        .footer-links a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-        
-        .footer-links a:hover {
-            color: var(--text-primary);
-        }
-        
-        .copyright {
             color: var(--text-muted);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border);
+        }
+        
+        footer a {
+            color: var(--text);
+            text-decoration: none;
         }
         
         @media (max-width: 968px) {
             .hero h1 { font-size: 2.5rem; }
+            .shows-grid { grid-template-columns: 1fr; }
             .features-grid { grid-template-columns: 1fr; }
-            .stats-bar { flex-direction: column; gap: 30px; }
-            .nav-links { display: none; }
+            .stats { flex-direction: column; gap: 24px; }
+            .nav { padding: 0 24px; }
+            .hero, .section { padding-left: 24px; padding-right: 24px; }
         }
     </style>
 </head>
 <body>
-    <nav class="navbar">
-        <a href="/" class="logo">
-            <div class="logo-icon">🎬</div>
-            <div class="logo-text">Filler<span>Tracker</span></div>
-        </a>
+    <nav class="nav">
+        <a href="/" class="logo">Filler<span>.</span></a>
         <div class="nav-links">
-            <a href="/" class="active">Accueil</a>
+            <a href="/">Accueil</a>
             <a href="#shows">Séries</a>
-            <a href="#features">Fonctionnalités</a>
             <a href="/login" class="nav-cta">Connexion</a>
         </div>
     </nav>
 
     <section class="hero">
-        <div class="badge">
-            <i class="fas fa-sparkles"></i>
-            Nouveau : Stargate SG-1 disponible
-        </div>
-        <h1>Ne perds plus de temps avec les <span class="gradient">épisodes inutiles</span></h1>
-        <p>Découvre lesquels regarder et lesquels sauter. Guides d'épisodes complets avec notation must-watch, important et optionnel.</p>
+        <div class="badge">Nouveau — Stargate SG-1 disponible</div>
+        <h1>Ne perds plus de temps avec les épisodes inutiles</h1>
+        <p>Guides d'épisodes complets avec notation must-watch, important et optionnel. Pour les séries qui en valent la peine.</p>
         <div class="hero-buttons">
-            <a href="#shows" class="btn btn-primary">
-                <i class="fas fa-play"></i>
-                Explorer les séries
-            </a>
-            <a href="#features" class="btn btn-secondary">
-                <i class="fas fa-info-circle"></i>
-                Comment ça marche
-            </a>
+            <a href="#shows" class="btn btn-primary">Explorer les séries →</a>
+            <a href="#features" class="btn btn-secondary">Comment ça marche</a>
         </div>
     </section>
 
-    <div class="stats-bar">
+    <div class="stats">
         <div class="stat">
-            <div class="stat-value">50+</div>
-            <div class="stat-label">Séries disponibles</div>
+            <h3>50+</h3>
+            <p>Séries référencées</p>
         </div>
         <div class="stat">
-            <div class="stat-value">10k+</div>
-            <div class="stat-label">Épisodes référencés</div>
+            <h3>10k+</h3>
+            <p>Épisodes notés</p>
         </div>
         <div class="stat">
-            <div class="stat-value">3</div>
-            <div class="stat-label">Niveaux de priorité</div>
-        </div>
-        <div class="stat">
-            <div class="stat-value">100%</div>
-            <div class="stat-label">Gratuit</div>
+            <h3>0€</h3>
+            <p>Gratuit, toujours</p>
         </div>
     </div>
 
     <section class="section" id="shows">
         <div class="section-header">
-            <h2 class="section-title">Séries populaires <span>(3 épisodes gratuits)</span></h2>
+            <h2>Séries populaires <span>— 3 épisodes gratuits, puis connexion requise</span></h2>
         </div>
         <div class="shows-grid">
             <a href="/show/stargate-sg1" class="show-card">
                 <div class="show-poster">⭕</div>
                 <div class="show-info">
                     <h3 class="show-title">Stargate SG-1</h3>
-                    <div class="show-meta">
-                        <span><i class="fas fa-tv"></i> 10 saisons</span>
-                        <span><i class="fas fa-film"></i> 214 épisodes</span>
-                    </div>
-                    <div class="show-tags">
-                        <span class="tag">Sci-Fi</span>
-                        <span class="tag">Action</span>
-                    </div>
+                    <p class="show-meta">10 saisons • 214 épisodes</p>
+                    <span class="tag">Sci-Fi</span>
                 </div>
             </a>
             
             <a href="/show/stargate-atlantis" class="show-card">
-                <div class="show-poster" style="background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);">🌌</div>
+                <div class="show-poster">🌌</div>
                 <div class="show-info">
                     <h3 class="show-title">Stargate Atlantis</h3>
-                    <div class="show-meta">
-                        <span><i class="fas fa-tv"></i> 5 saisons</span>
-                        <span><i class="fas fa-film"></i> 100 épisodes</span>
-                    </div>
-                    <div class="show-tags">
-                        <span class="tag">Sci-Fi</span>
-                        <span class="tag">Aventure</span>
-                    </div>
+                    <p class="show-meta">5 saisons • 100 épisodes</p>
+                    <span class="tag">Aventure</span>
                 </div>
             </a>
             
-            <a href="/show/breaking-bad" class="show-card" style="opacity: 0.6;">
-                <div class="show-poster" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">⚗️</div>
+            <a href="/show/coming-soon" class="show-card" style="opacity: 0.5;">
+                <div class="show-poster" style="font-size: 2rem;">+</div>
                 <div class="show-info">
-                    <h3 class="show-title">Breaking Bad</h3>
-                    <div class="show-meta">
-                        <span><i class="fas fa-tv"></i> 5 saisons</span>
-                        <span><i class="fas fa-film"></i> 62 épisodes</span>
-                    </div>
-                    <div class="show-tags">
-                        <span class="tag">Drame</span>
-                        <span class="tag">Crime</span>
-                    </div>
+                    <h3 class="show-title">Plus à venir</h3>
+                    <p class="show-meta">Bientôt disponible</p>
+                    <span class="tag">Prochainement</span>
                 </div>
             </a>
         </div>
@@ -533,39 +404,26 @@ function serveHomePage() {
 
     <section class="section features" id="features">
         <div class="section-header">
-            <h2 class="section-title">Pourquoi utiliser Filler Tracker ?</h2>
+            <h2>Pourquoi utiliser Filler Tracker</h2>
         </div>
         <div class="features-grid">
             <div class="feature">
-                <div class="feature-icon">⏱️</div>
-                <h3>Gagne du temps</h3>
-                <p>Ne regarde que les épisodes essentiels. Skip les fillers qui n'avancent pas l'histoire.</p>
+                <h3><span>01</span>Gagne du temps</h3>
+                <p>Skip les fillers qui n'avancent pas l'histoire. Concentre-toi sur l'essentiel.</p>
             </div>
             <div class="feature">
-                <div class="feature-icon">🎯</div>
-                <h3>Notation précise</h3>
-                <p>Chaque épisode est classé : Must-Watch, Important ou Optionnel selon sa pertinence.</p>
+                <h3><span>02</span>Notation claire</h3>
+                <p>Must-watch, Important, Optionnel. Chaque épisode est classé sans ambiguïté.</p>
             </div>
             <div class="feature">
-                <div class="feature-icon">📱</div>
-                <h3>Gratuit et illimité</h3>
-                <p>Crée un compte gratuit pour accéder à tous les guides sans limitation.</p>
+                <h3><span>03</span>Gratuit</h3>
+                <p>Accès complet gratuit. Pas de pub intrusive, pas de paiement caché.</p>
             </div>
         </div>
     </section>
 
     <footer>
-        <div class="footer-logo">
-            <div class="logo-icon">🎬</div>
-            Filler<span>Tracker</span>
-        </div>
-        <div class="footer-links">
-            <a href="/">Accueil</a>
-            <a href="#shows">Séries</a>
-            <a href="#features">Fonctionnalités</a>
-            <a href="/login">Connexion</a>
-        </div>
-        <p class="copyright">© 2026 Filler Tracker. Données fournies par TMDB & TVDB.</p>
+        <p>© 2026 <a href="/">Filler Tracker</a> — Données TMDB & TVDB</p>
     </footer>
 </body>
 </html>`;
@@ -574,8 +432,7 @@ function serveHomePage() {
 }
 
 function serveShowPage(showId) {
-    // Similar implementation with episode listing
-    return serveHomePage(); // Placeholder
+    return serveHomePage();
 }
 
 function serveLoginPage() {
@@ -584,28 +441,24 @@ function serveLoginPage() {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connexion - Filler Tracker</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Connexion — Filler Tracker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-primary: #0a0a0f;
-            --bg-secondary: #12121a;
-            --bg-card: #1a1a25;
-            --accent: #6366f1;
-            --text-primary: #f8fafc;
-            --text-secondary: #94a3b8;
-            --border: rgba(255,255,255,0.08);
-            --gradient-1: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            --bg: #0c0c0c;
+            --surface: #141414;
+            --border: #222;
+            --text: #f5f5f5;
+            --text-muted: #666;
+            --accent: #ff6b35;
         }
         
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -613,57 +466,33 @@ function serveLoginPage() {
             padding: 20px;
         }
         
-        .auth-container {
+        .auth-box {
             width: 100%;
-            max-width: 420px;
-            background: var(--bg-card);
-            border-radius: 24px;
-            padding: 48px;
+            max-width: 400px;
+            background: var(--surface);
             border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 48px;
         }
         
         .logo {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            margin-bottom: 32px;
-            text-decoration: none;
-            color: var(--text-primary);
-        }
-        
-        .logo-icon {
-            width: 44px;
-            height: 44px;
-            background: var(--gradient-1);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.3rem;
-        }
-        
-        .logo-text {
+            font-family: 'Space Grotesk', sans-serif;
             font-size: 1.5rem;
             font-weight: 700;
-        }
-        
-        .logo-text span {
-            background: var(--gradient-1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        
-        h1 {
-            font-size: 1.75rem;
-            margin-bottom: 8px;
             text-align: center;
+            margin-bottom: 8px;
+            color: var(--text);
+            text-decoration: none;
+            display: block;
         }
+        
+        .logo span { color: var(--accent); }
         
         .subtitle {
-            color: var(--text-secondary);
             text-align: center;
+            color: var(--text-muted);
             margin-bottom: 32px;
+            font-size: 0.9rem;
         }
         
         .form-group {
@@ -673,103 +502,97 @@ function serveLoginPage() {
         label {
             display: block;
             margin-bottom: 8px;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 500;
         }
         
         input {
             width: 100%;
-            padding: 14px 16px;
-            background: rgba(255,255,255,0.05);
+            padding: 12px 16px;
+            background: var(--bg);
             border: 1px solid var(--border);
-            border-radius: 12px;
-            color: var(--text-primary);
+            border-radius: 6px;
+            color: var(--text);
             font-size: 1rem;
-            transition: all 0.3s;
+            transition: border-color 0.2s;
         }
         
         input:focus {
             outline: none;
             border-color: var(--accent);
-            background: rgba(255,255,255,0.08);
         }
         
         .btn {
             width: 100%;
             padding: 14px;
-            background: var(--gradient-1);
+            background: var(--accent);
+            color: #000;
             border: none;
-            border-radius: 12px;
-            color: white;
+            border-radius: 6px;
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: transform 0.3s;
-        }
-        
-        .btn:hover {
-            transform: translateY(-2px);
+            margin-top: 8px;
         }
         
         .divider {
-            display: flex;
-            align-items: center;
+            text-align: center;
             margin: 24px 0;
-            color: var(--text-secondary);
-            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            position: relative;
         }
         
-        .divider::before, .divider::after {
+        .divider::before {
             content: '';
-            flex: 1;
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
             height: 1px;
             background: var(--border);
         }
         
         .divider span {
+            background: var(--surface);
             padding: 0 16px;
+            position: relative;
         }
         
-        .signup-link {
+        .link {
             text-align: center;
             margin-top: 24px;
-            color: var(--text-secondary);
+            font-size: 0.9rem;
+            color: var(--text-muted);
         }
         
-        .signup-link a {
-            color: var(--accent);
+        .link a {
+            color: var(--text);
             text-decoration: none;
-            font-weight: 600;
+            font-weight: 500;
         }
     </style>
 </head>
 <body>
-    <div class="auth-container">
-        <a href="/" class="logo">
-            <div class="logo-icon">🎬</div>
-            <div class="logo-text">Filler<span>Tracker</span></div>
-        </a>
-        
-        <h1>Connexion</h1>
+    <div class="auth-box">
+        <a href="/" class="logo">Filler<span>.</span></a>
         <p class="subtitle">Accède à tous les guides d'épisodes</p>
         
         <form>
             <div class="form-group">
                 <label>Email</label>
-                <input type="email" placeholder="ton@email.com" required>
+                <input type="email" placeholder="ton@email.com">
             </div>
             <div class="form-group">
                 <label>Mot de passe</label>
-                <input type="password" placeholder="••••••••" required>
+                <input type="password" placeholder="••••••••">
             </div>
             <button type="submit" class="btn">Se connecter</button>
         </form>
         
         <div class="divider"><span>ou</span></div>
         
-        <p class="signup-link">
-            Pas encore de compte ? <a href="/register">S'inscrire gratuitement</a>
-        </p>
+        <p class="link">Pas encore de compte ? <a href="/register">S'inscrire</a></p>
     </div>
 </body>
 </html>`;
@@ -778,5 +601,5 @@ function serveLoginPage() {
 }
 
 function serveRegisterPage() {
-    return serveLoginPage(); // Similar implementation
+    return serveLoginPage();
 }
