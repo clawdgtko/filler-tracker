@@ -1,0 +1,125 @@
+/* Styles Mobile Menu - À ajouter dans chaque page */
+
+/* Mobile Menu Button */
+.mobile-menu-btn {
+  display: none;
+  width: 44px;
+  height: 44px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 1.2rem;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  -webkit-tap-highlight-color: rgba(255, 107, 53, 0.3);
+}
+
+.mobile-menu-btn:hover {
+  background: var(--surface-hover);
+  border-color: var(--accent);
+}
+
+.mobile-menu-btn:active {
+  transform: scale(0.95);
+}
+
+/* Mobile Navigation Overlay */
+.mobile-nav {
+  display: none;
+  position: fixed;
+  top: 64px;
+  left: 0;
+  right: 0;
+  background: rgba(12, 12, 12, 0.98);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 16px;
+  z-index: 99;
+  transform: translateY(-100%);
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.mobile-nav.active {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.mobile-nav a, .mobile-nav button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 16px;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1rem;
+  border-radius: 8px;
+  transition: all 0.2s;
+  min-height: 56px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+}
+
+.mobile-nav a:hover, .mobile-nav a.active,
+.mobile-nav button:hover {
+  background: var(--surface);
+  color: var(--text);
+}
+
+/* Touch Targets - Min 44px */
+.nav-links a, .lang-switch, .btn, .badge, .show-card,
+.episode-row, .season-btn, .back-btn, .filter-btn {
+  min-height: 44px;
+}
+
+/* Responsive - Mobile */
+@media (max-width: 768px) {
+  .nav { padding: 0 20px; }
+  .nav-links { display: none; }
+  .mobile-menu-btn { display: flex; }
+  .mobile-nav { display: block; }
+  
+  .hero { padding: 100px 20px 60px; }
+  .hero h1 { font-size: 2rem; }
+  .hero p { font-size: 1rem; }
+  
+  .stats {
+    flex-direction: column;
+    gap: 24px;
+    padding: 30px 20px;
+  }
+  
+  .section { padding: 40px 20px; }
+  
+  footer { padding: 40px 20px; }
+}
+
+@media (max-width: 480px) {
+  .hero h1 { font-size: 1.6rem; }
+  .nav { height: 56px; }
+  .mobile-nav { top: 56px; }
+  .hero { padding-top: 90px; }
+}
+
+/* Safe areas */
+@supports (padding-top: env(safe-area-inset-top)) {
+  .nav {
+    padding-top: env(safe-area-inset-top);
+    height: calc(64px + env(safe-area-inset-top));
+  }
+  .mobile-nav { top: calc(64px + env(safe-area-inset-top)); }
+  .hero { padding-top: calc(140px + env(safe-area-inset-top)); }
+  
+  @media (max-width: 768px) {
+    .nav { height: calc(56px + env(safe-area-inset-top)); }
+    .mobile-nav { top: calc(56px + env(safe-area-inset-top)); }
+    .hero { padding-top: calc(100px + env(safe-area-inset-top)); }
+  }
+}

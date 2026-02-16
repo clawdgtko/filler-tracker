@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-    <title>Filler Tracker - Guide d'épisodes</title>
+    <title>Filler Tracker — Guide d'épisodes (sans spoilers)</title>
+    <meta name="description" content="Découvre quels épisodes regarder et lesquels sauter. Guides filler pour Naruto, One Piece, Stargate et plus. Gratuit.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -25,12 +26,21 @@
             --border: rgba(255,255,255,0.08);
             --gradient-1: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%);
             --gradient-2: linear-gradient(135deg, #06b6d4 0%, #6366f1 100%);
+            
+            /* UX-Optimized: Animation timings */
+            --transition-fast: 150ms ease;
+            --transition-normal: 250ms ease;
+            --transition-slow: 350ms ease;
         }
         
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
         }
         
         body {
@@ -41,14 +51,16 @@
             min-height: 100vh;
         }
         
-        /* Navigation */
+        /* ============================================
+           NAVIGATION
+           ============================================ */
         .navbar {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             height: 70px;
-            background: rgba(10, 10, 15, 0.9);
+            background: rgba(10, 10, 15, 0.95);
             backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border);
             z-index: 1000;
@@ -75,6 +87,11 @@
             align-items: center;
             justify-content: center;
             font-size: 1.2rem;
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        
+        .logo:hover .logo-icon {
+            transform: rotate(-5deg) scale(1.1);
         }
         
         .logo-text {
@@ -98,12 +115,29 @@
             color: var(--text-secondary);
             text-decoration: none;
             font-weight: 500;
-            transition: color 0.3s;
+            transition: color 0.2s ease;
             font-size: 0.95rem;
+            position: relative;
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-1);
+            transition: width 0.3s ease;
         }
         
         .nav-links a:hover, .nav-links a.active {
             color: var(--text-primary);
+        }
+        
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
         }
         
         .nav-cta {
@@ -120,14 +154,17 @@
             box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
         }
         
-        /* Hero Section */
+        /* ============================================
+           HERO SECTION — UX OPTIMIZED
+           ============================================ */
         .hero {
-            padding: 140px 5% 80px;
+            padding: 140px 5% 60px;
             text-align: center;
             background: radial-gradient(ellipse at top, rgba(99, 102, 241, 0.15) 0%, transparent 50%);
+            animation: fadeInUp 0.6s ease-out 0.1s both;
         }
         
-        .badge {
+        .hero-badge {
             display: inline-flex;
             align-items: center;
             gap: 8px;
@@ -138,13 +175,14 @@
             font-size: 0.85rem;
             color: var(--accent-light);
             margin-bottom: 24px;
+            animation: pulse 3s ease-in-out infinite;
         }
         
         .hero h1 {
-            font-size: 4rem;
+            font-size: 3.5rem;
             font-weight: 800;
             line-height: 1.1;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
             max-width: 800px;
             margin-left: auto;
             margin-right: auto;
@@ -156,61 +194,226 @@
             -webkit-text-fill-color: transparent;
         }
         
-        .hero p {
-            font-size: 1.25rem;
+        .hero-subtitle {
+            font-size: 1.15rem;
             color: var(--text-secondary);
             max-width: 600px;
-            margin: 0 auto 40px;
+            margin: 0 auto 32px;
         }
         
-        .hero-buttons {
+        /* UX-Optimized: Hero Search */
+        .hero-search-container {
+            max-width: 640px;
+            margin: 0 auto 24px;
+            position: relative;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+        
+        .hero-search {
+            position: relative;
             display: flex;
-            gap: 16px;
-            justify-content: center;
-        }
-        
-        .btn {
-            padding: 14px 32px;
-            border-radius: 12px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.3s;
-            display: inline-flex;
             align-items: center;
-            gap: 10px;
-            font-size: 1rem;
         }
         
-        .btn-primary {
-            background: var(--gradient-1);
-            color: white;
-            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
-        }
-        
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(99, 102, 241, 0.4);
-        }
-        
-        .btn-secondary {
+        .hero-search input {
+            width: 100%;
+            padding: 20px 60px 20px 24px;
+            font-size: 1.1rem;
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
             background: var(--bg-card);
             color: var(--text-primary);
-            border: 1px solid var(--border);
+            transition: all 0.3s ease;
         }
         
-        .btn-secondary:hover {
+        .hero-search input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        }
+        
+        .hero-search input::placeholder {
+            color: var(--text-muted);
+        }
+        
+        .hero-search button {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            padding: 12px 20px;
+            background: var(--gradient-1);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .hero-search button:hover {
+            transform: translateY(-50%) scale(1.05);
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+        }
+        
+        .hero-search button:active {
+            transform: translateY(-50%) scale(0.95);
+        }
+        
+        /* Search Suggestions Dropdown */
+        .search-suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            margin-top: 8px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.2s ease;
+            z-index: 100;
+        }
+        
+        .search-suggestions.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        .search-suggestion-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 20px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+        
+        .search-suggestion-item:hover {
+            background: var(--bg-hover);
+        }
+        
+        .search-suggestion-item:not(:last-child) {
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .suggestion-emoji {
+            font-size: 1.5rem;
+        }
+        
+        .suggestion-text {
+            flex: 1;
+            text-align: left;
+        }
+        
+        .suggestion-title {
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+        
+        .suggestion-meta {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+        
+        .suggestion-arrow {
+            color: var(--text-muted);
+            transition: transform 0.2s ease;
+        }
+        
+        .search-suggestion-item:hover .suggestion-arrow {
+            transform: translateX(4px);
+            color: var(--accent-light);
+        }
+        
+        /* Social Proof */
+        .social-proof {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+        
+        .social-proof-avatars {
+            display: flex;
+            margin-right: 8px;
+        }
+        
+        .social-proof-avatars span {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--gradient-1);
+            border: 2px solid var(--bg-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            margin-left: -8px;
+        }
+        
+        .social-proof-avatars span:first-child {
+            margin-left: 0;
+        }
+        
+        /* ============================================
+           QUICK FILTERS — UX OPTIMIZED
+           ============================================ */
+        .quick-filters {
+            display: flex;
+            gap: 12px;
+            padding: 20px 5%;
+            justify-content: center;
+            flex-wrap: wrap;
+            border-bottom: 1px solid var(--border);
+            animation: fadeInUp 0.6s ease-out 0.5s both;
+        }
+        
+        .filter-btn {
+            padding: 10px 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            color: var(--text-secondary);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .filter-btn:hover {
             background: var(--bg-hover);
             border-color: rgba(255,255,255,0.2);
+            color: var(--text-primary);
         }
         
-        /* Stats */
+        .filter-btn.active {
+            background: var(--gradient-1);
+            border-color: transparent;
+            color: white;
+        }
+        
+        /* ============================================
+           STATS BAR
+           ============================================ */
         .stats-bar {
             display: flex;
             justify-content: center;
             gap: 60px;
             padding: 40px 5%;
-            border-top: 1px solid var(--border);
             border-bottom: 1px solid var(--border);
+            animation: fadeInUp 0.6s ease-out 0.5s both;
         }
         
         .stat {
@@ -223,6 +426,11 @@
             background: var(--gradient-1);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            transition: transform 0.3s ease;
+        }
+        
+        .stat:hover .stat-value {
+            transform: scale(1.1);
         }
         
         .stat-label {
@@ -230,20 +438,24 @@
             font-size: 0.9rem;
         }
         
-        /* Shows Grid */
+        /* ============================================
+           SHOWS SECTION — UX OPTIMIZED
+           ============================================ */
         .section {
-            padding: 80px 5%;
+            padding: 60px 5%;
         }
         
         .section-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 40px;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+            gap: 16px;
         }
         
         .section-title {
-            font-size: 2rem;
+            font-size: 1.75rem;
             font-weight: 700;
         }
         
@@ -252,9 +464,33 @@
             font-weight: 400;
         }
         
+        .view-toggle {
+            display: flex;
+            gap: 8px;
+            background: var(--bg-card);
+            padding: 4px;
+            border-radius: 10px;
+        }
+        
+        .view-btn {
+            padding: 8px 16px;
+            background: transparent;
+            border: none;
+            border-radius: 8px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .view-btn.active {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+        }
+        
+        /* Shows Grid */
         .shows-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 24px;
         }
         
@@ -263,17 +499,31 @@
             border-radius: 20px;
             overflow: hidden;
             border: 1px solid var(--border);
-            transition: all 0.3s;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
             text-decoration: none;
             color: inherit;
+            opacity: 0;
+            animation: staggerIn 0.5s ease-out forwards;
         }
+        
+        .show-card:nth-child(1) { animation-delay: 0.1s; }
+        .show-card:nth-child(2) { animation-delay: 0.15s; }
+        .show-card:nth-child(3) { animation-delay: 0.2s; }
+        .show-card:nth-child(4) { animation-delay: 0.25s; }
+        .show-card:nth-child(5) { animation-delay: 0.3s; }
+        .show-card:nth-child(6) { animation-delay: 0.35s; }
         
         .show-card:hover {
-            transform: translateY(-8px);
+            transform: translateY(-8px) scale(1.02);
             border-color: rgba(99, 102, 241, 0.3);
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.4);
         }
         
+        .show-card:active {
+            transform: scale(0.98);
+        }
+        
+        /* UX-Optimized: Show Poster with Filler Badge */
         .show-poster {
             height: 180px;
             background: var(--gradient-2);
@@ -281,44 +531,122 @@
             align-items: center;
             justify-content: center;
             font-size: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .show-poster img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        /* Filler Badge — UX Critical */
+        .filler-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        
+        .filler-badge.high {
+            background: rgba(34, 197, 94, 0.95);
+            color: white;
+        }
+        
+        .filler-badge.medium {
+            background: rgba(245, 158, 11, 0.95);
+            color: white;
+        }
+        
+        .filler-badge.low {
+            background: rgba(239, 68, 68, 0.95);
+            color: white;
         }
         
         .show-info {
-            padding: 24px;
+            padding: 20px;
         }
         
         .show-title {
-            font-size: 1.25rem;
+            font-size: 1.15rem;
             font-weight: 700;
             margin-bottom: 8px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         
         .show-meta {
             display: flex;
             gap: 16px;
             color: var(--text-secondary);
-            font-size: 0.9rem;
-            margin-bottom: 16px;
+            font-size: 0.85rem;
+            margin-bottom: 12px;
         }
         
         .show-meta i {
-            margin-right: 6px;
+            margin-right: 4px;
         }
         
         .show-tags {
             display: flex;
             gap: 8px;
+            flex-wrap: wrap;
         }
         
         .tag {
-            padding: 6px 12px;
+            padding: 4px 10px;
             background: rgba(99, 102, 241, 0.1);
             border-radius: 20px;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: var(--accent-light);
+            transition: all 0.2s ease;
         }
         
-        /* Features */
+        .tag:hover {
+            background: rgba(99, 102, 241, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        /* Show Progress Mini */
+        .show-progress-mini {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border);
+        }
+        
+        .progress-bar-mini {
+            height: 4px;
+            background: var(--bg-hover);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        
+        .progress-fill-mini {
+            height: 100%;
+            background: var(--gradient-1);
+            border-radius: 2px;
+            transition: width 0.5s ease;
+        }
+        
+        .progress-text-mini {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 6px;
+        }
+        
+        /* ============================================
+           FEATURES SECTION
+           ============================================ */
         .features {
             background: var(--bg-secondary);
         }
@@ -332,7 +660,13 @@
         .feature {
             text-align: center;
             padding: 40px 24px;
+            opacity: 0;
+            animation: fadeInUp 0.5s ease-out forwards;
         }
+        
+        .feature:nth-child(1) { animation-delay: 0.6s; }
+        .feature:nth-child(2) { animation-delay: 0.7s; }
+        .feature:nth-child(3) { animation-delay: 0.8s; }
         
         .feature-icon {
             width: 70px;
@@ -344,6 +678,11 @@
             justify-content: center;
             margin: 0 auto 24px;
             font-size: 1.8rem;
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        
+        .feature:hover .feature-icon {
+            transform: scale(1.1) rotate(5deg);
         }
         
         .feature h3 {
@@ -356,7 +695,295 @@
             font-size: 0.95rem;
         }
         
-        /* Footer */
+        /* ============================================
+           MODAL LIMITE — UX OPTIMIZED (Critical)
+           ============================================ */
+        .limit-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(8px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .limit-modal.active {
+            display: flex;
+            opacity: 1;
+        }
+        
+        .limit-content {
+            background: var(--bg-secondary);
+            border-radius: 24px;
+            padding: 40px;
+            max-width: 480px;
+            width: 100%;
+            text-align: center;
+            border: 1px solid var(--border);
+            transform: scale(0.95) translateY(20px);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        
+        .limit-modal.active .limit-content {
+            transform: scale(1) translateY(0);
+        }
+        
+        .limit-emoji {
+            font-size: 4rem;
+            margin-bottom: 16px;
+            animation: bounce 1s ease infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .limit-content h2 {
+            font-size: 1.75rem;
+            margin-bottom: 8px;
+        }
+        
+        .limit-subtitle {
+            color: var(--text-secondary);
+            margin-bottom: 28px;
+        }
+        
+        .benefits-list {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 28px;
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 8px;
+        }
+        
+        .benefits-list li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            border-radius: 12px;
+            transition: background 0.2s ease;
+        }
+        
+        .benefits-list li:hover {
+            background: var(--bg-hover);
+        }
+        
+        .benefits-list li:not(:last-child) {
+            margin-bottom: 4px;
+        }
+        
+        .benefit-icon {
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+        
+        .benefit-text {
+            color: var(--text-secondary);
+        }
+        
+        .benefit-text strong {
+            color: var(--text-primary);
+        }
+        
+        .limit-cta .btn-primary {
+            width: 100%;
+            padding: 16px;
+            font-size: 1.05rem;
+            margin-bottom: 12px;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .limit-secondary {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        
+        .limit-secondary a {
+            color: var(--accent-light);
+            text-decoration: none;
+        }
+        
+        .limit-close {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            margin-top: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            text-decoration: underline;
+            transition: color 0.2s ease;
+        }
+        
+        .limit-close:hover {
+            color: var(--text-primary);
+        }
+        
+        /* Trust Badges */
+        .trust-badges {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 20px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+        
+        .trust-badge {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        /* ============================================
+           ONBOARDING OVERLAY — UX OPTIMIZED
+           ============================================ */
+        .onboarding-overlay {
+            position: fixed;
+            inset: 0;
+            background: var(--bg-primary);
+            z-index: 20000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .onboarding-overlay.active {
+            display: flex;
+        }
+        
+        .onboarding-step {
+            max-width: 480px;
+            width: 100%;
+            text-align: center;
+            display: none;
+            animation: fadeInUp 0.5s ease-out;
+        }
+        
+        .onboarding-step.active {
+            display: block;
+        }
+        
+        .onboarding-visual {
+            font-size: 5rem;
+            margin-bottom: 24px;
+        }
+        
+        .onboarding-step h2 {
+            font-size: 1.75rem;
+            margin-bottom: 12px;
+        }
+        
+        .onboarding-step p {
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+        }
+        
+        .show-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            margin-bottom: 24px;
+        }
+        
+        .show-chip {
+            padding: 12px 24px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            color: var(--text-primary);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .show-chip:hover {
+            background: var(--bg-hover);
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+        
+        .show-chip.selected {
+            background: var(--gradient-1);
+            border-color: transparent;
+        }
+        
+        .episode-preview {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .ep-num {
+            font-weight: 700;
+            color: var(--text-muted);
+        }
+        
+        .ep-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+        
+        .ep-badge.must {
+            background: rgba(34, 197, 94, 0.2);
+            color: var(--success);
+        }
+        
+        .ep-title {
+            flex: 1;
+            text-align: left;
+        }
+        
+        .onboarding-tip {
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 24px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        
+        .onboarding-dots {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 32px;
+        }
+        
+        .onboarding-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--border);
+            transition: all 0.3s ease;
+        }
+        
+        .onboarding-dot.active {
+            background: var(--accent);
+            width: 24px;
+            border-radius: 4px;
+        }
+        
+        /* ============================================
+           FOOTER
+           ============================================ */
         footer {
             padding: 60px 5%;
             border-top: 1px solid var(--border);
@@ -383,11 +1010,12 @@
         .footer-links a {
             color: var(--text-secondary);
             text-decoration: none;
-            transition: color 0.3s;
+            transition: all 0.2s ease;
         }
         
         .footer-links a:hover {
             color: var(--text-primary);
+            transform: translateX(4px);
         }
         
         .copyright {
@@ -395,7 +1023,9 @@
             font-size: 0.9rem;
         }
         
-        /* Mobile Navigation */
+        /* ============================================
+           MOBILE NAVIGATION
+           ============================================ */
         .mobile-menu-btn {
             display: none;
             width: 44px;
@@ -416,11 +1046,6 @@
             border-color: var(--accent);
         }
         
-        .mobile-menu-btn:active {
-            transform: scale(0.95);
-        }
-        
-        /* Mobile Navigation Overlay */
         .mobile-nav {
             display: none;
             position: fixed;
@@ -462,11 +1087,6 @@
             color: var(--text-primary);
         }
         
-        .mobile-nav a i {
-            width: 24px;
-            text-align: center;
-        }
-        
         .mobile-nav .nav-cta-mobile {
             background: var(--gradient-1);
             color: white !important;
@@ -475,30 +1095,14 @@
             font-weight: 600;
         }
         
-        /* Touch Targets - Min 44px */
-        .nav-links a,
-        .footer-links a,
-        .tag,
-        .badge,
-        .show-meta span,
-        .btn {
-            min-height: 44px;
-            min-width: 44px;
-            display: inline-flex;
-            align-items: center;
-        }
-        
-        /* Better tap highlights */
-        a, button {
-            -webkit-tap-highlight-color: rgba(99, 102, 241, 0.3);
-        }
-        
         /* ============================================
-           ANIMATIONS CSS - SPRINT #86
-           Subtil, 60fps, GPU-accelerated
+           ANIMATIONS
            ============================================ */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
         
-        /* Page Transition - Fade In Up */
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -510,23 +1114,6 @@
             }
         }
         
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
-        @keyframes slideInRight {
-            from {
-                opacity: 0;
-                transform: translateX(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-        
-        /* Staggered entrance for grid items */
         @keyframes staggerIn {
             from {
                 opacity: 0;
@@ -538,244 +1125,33 @@
             }
         }
         
-        /* Shimmer loading effect */
-        @keyframes shimmer {
-            0% {
-                background-position: -200% 0;
-            }
-            100% {
-                background-position: 200% 0;
-            }
-        }
-        
-        /* Pulse subtle for badges */
         @keyframes pulse {
-            0%, 100% {
-                opacity: 1;
-            }
-            50% {
-                opacity: 0.8;
-            }
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
         }
         
-        /* Page entrance animations */
-        body {
-            animation: fadeIn 0.4s ease-out;
-        }
-        
-        .hero {
-            animation: fadeInUp 0.6s ease-out 0.1s both;
-        }
-        
-        .hero h1 {
-            animation: fadeInUp 0.6s ease-out 0.2s both;
-        }
-        
-        .hero p {
-            animation: fadeInUp 0.6s ease-out 0.3s both;
-        }
-        
-        .hero-buttons {
-            animation: fadeInUp 0.6s ease-out 0.4s both;
-        }
-        
-        .stats-bar {
-            animation: fadeInUp 0.6s ease-out 0.5s both;
-        }
-        
-        /* Staggered grid animation */
-        .show-card {
-            opacity: 0;
-            animation: staggerIn 0.5s ease-out forwards;
-        }
-        
-        .show-card:nth-child(1) { animation-delay: 0.1s; }
-        .show-card:nth-child(2) { animation-delay: 0.15s; }
-        .show-card:nth-child(3) { animation-delay: 0.2s; }
-        .show-card:nth-child(4) { animation-delay: 0.25s; }
-        .show-card:nth-child(5) { animation-delay: 0.3s; }
-        .show-card:nth-child(6) { animation-delay: 0.35s; }
-        
-        /* Micro-interactions - Buttons */
-        .btn {
-            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), 
-                        box-shadow 0.2s ease,
-                        background-color 0.2s ease;
-            will-change: transform;
-        }
-        
-        .btn:hover {
-            transform: translateY(-2px);
-        }
-        
-        .btn:active {
-            transform: scale(0.97) translateY(0);
-            transition-duration: 0.1s;
-        }
-        
-        /* Button magnetic effect on hover */
-        .btn-primary:hover {
-            box-shadow: 0 10px 40px rgba(99, 102, 241, 0.4),
-                        0 0 0 1px rgba(99, 102, 241, 0.3);
-        }
-        
-        /* Show card micro-interactions */
-        .show-card {
-            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
-                        box-shadow 0.3s ease,
-                        border-color 0.2s ease;
-            will-change: transform;
-        }
-        
-        .show-card:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
-        }
-        
-        .show-card:active {
-            transform: scale(0.98);
-            transition-duration: 0.1s;
-        }
-        
-        /* Logo animation */
-        .logo-icon {
-            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-        
-        .logo:hover .logo-icon {
-            transform: rotate(-5deg) scale(1.1);
-        }
-        
-        /* Nav links underline animation */
-        .nav-links a {
-            position: relative;
-            transition: color 0.2s ease;
-        }
-        
-        .nav-links a::after {
-            content: '';
+        /* ============================================
+           ACCESSIBILITY
+           ============================================ */
+        .sr-only {
             position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--gradient-1);
-            transition: width 0.3s ease;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
         }
         
-        .nav-links a:hover::after,
-        .nav-links a.active::after {
-            width: 100%;
+        :focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
         }
         
-        /* Feature cards */
-        .feature {
-            opacity: 0;
-            animation: fadeInUp 0.5s ease-out forwards;
-        }
-        
-        .feature:nth-child(1) { animation-delay: 0.6s; }
-        .feature:nth-child(2) { animation-delay: 0.7s; }
-        .feature:nth-child(3) { animation-delay: 0.8s; }
-        
-        .feature-icon {
-            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-        
-        .feature:hover .feature-icon {
-            transform: scale(1.1) rotate(5deg);
-        }
-        
-        /* Badge pulse */
-        .badge {
-            animation: pulse 3s ease-in-out infinite;
-        }
-        
-        .badge:hover {
-            animation: none;
-            transform: scale(1.05);
-        }
-        
-        /* Tags hover */
-        .tag {
-            transition: all 0.2s ease;
-        }
-        
-        .tag:hover {
-            transform: translateY(-2px);
-            background: rgba(99, 102, 241, 0.2);
-        }
-        
-        /* Mobile menu button */
-        .mobile-menu-btn {
-            transition: transform 0.2s ease, background-color 0.2s ease;
-        }
-        
-        .mobile-menu-btn:active {
-            transform: scale(0.9);
-        }
-        
-        /* Footer links */
-        .footer-links a {
-            transition: color 0.2s ease, transform 0.2s ease;
-        }
-        
-        .footer-links a:hover {
-            transform: translateX(4px);
-        }
-        
-        /* Loading Shimmer States */
-        .shimmer {
-            background: linear-gradient(
-                90deg,
-                var(--bg-card) 25%,
-                var(--bg-hover) 50%,
-                var(--bg-card) 75%
-            );
-            background-size: 200% 100%;
-            animation: shimmer 1.5s infinite;
-        }
-        
-        .shimmer-text {
-            background: linear-gradient(
-                90deg,
-                var(--text-muted) 25%,
-                var(--text-secondary) 50%,
-                var(--text-muted) 75%
-            );
-            background-size: 200% 100%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: shimmer 2s infinite;
-        }
-        
-        /* Section headers */
-        .section-header {
-            animation: fadeInUp 0.5s ease-out both;
-        }
-        
-        /* Stat value count animation trigger */
-        .stat-value {
-            transition: transform 0.3s ease;
-        }
-        
-        .stat:hover .stat-value {
-            transform: scale(1.1);
-            background: var(--gradient-1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        
-        /* Smooth scroll behavior */
-        html {
-            scroll-behavior: smooth;
-        }
-        
-        /* Reduce motion for accessibility */
         @media (prefers-reduced-motion: reduce) {
-            *,
-            *::before,
-            *::after {
+            *, *::before, *::after {
                 animation-duration: 0.01ms !important;
                 animation-iteration-count: 1 !important;
                 transition-duration: 0.01ms !important;
@@ -783,22 +1159,23 @@
             }
         }
         
-        /* Responsive - Tablet */
+        /* ============================================
+           RESPONSIVE
+           ============================================ */
         @media (max-width: 968px) {
             .nav-links { display: none; }
             .mobile-menu-btn { display: flex; }
             .mobile-nav { display: block; }
             
             .hero {
-                padding: 100px 5% 60px;
+                padding: 100px 5% 50px;
             }
             
             .hero h1 { 
                 font-size: 2rem; 
-                line-height: 1.2;
             }
             
-            .hero p {
+            .hero-subtitle {
                 font-size: 1rem;
             }
             
@@ -811,27 +1188,12 @@
                 gap: 24px;
                 padding: 30px 5%;
             }
-            
-            .stat-value {
-                font-size: 2rem;
-            }
         }
         
-        /* Responsive - Mobile */
         @media (max-width: 640px) {
             .navbar {
                 height: 60px;
                 padding: 0 4%;
-            }
-            
-            .logo-text {
-                font-size: 1.1rem;
-            }
-            
-            .logo-icon {
-                width: 36px;
-                height: 36px;
-                font-size: 1rem;
             }
             
             .mobile-nav {
@@ -839,57 +1201,30 @@
             }
             
             .hero {
-                padding: 90px 4% 50px;
+                padding: 90px 4% 40px;
             }
             
             .hero h1 {
-                font-size: 1.75rem;
+                font-size: 1.6rem;
             }
             
-            .hero p {
-                font-size: 0.95rem;
-                margin-bottom: 30px;
+            .hero-search input {
+                padding: 16px 56px 16px 16px;
+                font-size: 1rem;
             }
             
-            .badge {
-                font-size: 0.8rem;
+            .hero-search button {
+                padding: 10px 14px;
+            }
+            
+            .quick-filters {
+                padding: 16px 4%;
+                gap: 8px;
+            }
+            
+            .filter-btn {
                 padding: 8px 14px;
-            }
-            
-            .hero-buttons {
-                flex-direction: column;
-                gap: 12px;
-            }
-            
-            .btn {
-                width: 100%;
-                justify-content: center;
-                padding: 16px 24px;
-                min-height: 56px;
-            }
-            
-            .stats-bar {
-                padding: 24px 4%;
-                gap: 20px;
-            }
-            
-            .stat-value {
-                font-size: 1.75rem;
-            }
-            
-            .section {
-                padding: 50px 4%;
-            }
-            
-            .section-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 12px;
-                margin-bottom: 24px;
-            }
-            
-            .section-title {
-                font-size: 1.5rem;
+                font-size: 0.85rem;
             }
             
             .shows-grid {
@@ -901,84 +1236,20 @@
                 border-radius: 16px;
             }
             
-            .show-poster {
-                height: 160px;
-            }
-            
-            .show-info {
-                padding: 16px;
-            }
-            
-            .show-title {
-                font-size: 1.1rem;
-            }
-            
-            .show-meta {
-                font-size: 0.85rem;
-                gap: 12px;
-                flex-wrap: wrap;
-            }
-            
-            .tag {
-                padding: 8px 14px;
-                font-size: 0.8rem;
-            }
-            
-            .features-grid {
-                gap: 16px;
-            }
-            
-            .feature {
-                padding: 30px 20px;
-            }
-            
-            .feature-icon {
-                width: 60px;
-                height: 60px;
-                font-size: 1.5rem;
-                border-radius: 16px;
-            }
-            
-            footer {
+            .section {
                 padding: 40px 4%;
             }
             
-            .footer-logo {
-                font-size: 1.1rem;
+            .limit-content {
+                padding: 24px;
             }
             
-            .footer-links {
-                flex-direction: column;
-                gap: 16px;
-                margin-bottom: 24px;
+            .limit-emoji {
+                font-size: 3rem;
             }
             
-            .footer-links a {
-                padding: 8px 0;
-                min-height: 44px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-        }
-        
-        /* Small Mobile */
-        @media (max-width: 380px) {
-            .hero h1 {
-                font-size: 1.5rem;
-            }
-            
-            .badge {
-                font-size: 0.75rem;
-                padding: 6px 12px;
-            }
-            
-            .stat-value {
-                font-size: 1.5rem;
-            }
-            
-            .section-title {
-                font-size: 1.3rem;
+            .limit-content h2 {
+                font-size: 1.4rem;
             }
         }
         
@@ -1051,25 +1322,85 @@
         </a>
     </div>
 
-    <!-- Hero Section -->
+    <!-- Hero Section — UX Optimized -->
     <section class="hero">
-        <div class="badge">
+        <div class="hero-badge">
             <i class="fas fa-sparkles"></i>
-            Nouveau : Stargate SG-1 disponible
+            Nouveau : Guides Naruto & Stargate SG-1
         </div>
         <h1>Ne perds plus de temps avec les <span class="gradient">épisodes inutiles</span></h1>
-        <p>Découvre lesquels regarder et lesquels sauter. Guides d'épisodes complets avec notation must-watch, important et optionnel.</p>
-        <div class="hero-buttons">
-            <a href="#shows" class="btn btn-primary">
-                <i class="fas fa-play"></i>
-                Explorer les séries
-            </a>
-            <a href="#features" class="btn btn-secondary">
-                <i class="fas fa-info-circle"></i>
-                Comment ça marche
-            </a>
+        <p class="hero-subtitle">Découvre quels épisodes regarder et lesquels sauter. Guides filler pour anime et séries TV.</p>
+        
+        <!-- UX-Optimized: Hero Search -->
+        <div class="hero-search-container">
+            <div class="hero-search">
+                <input type="text" 
+                       id="heroSearch"
+                       placeholder="Cherche ta série (Naruto, Breaking Bad...)"
+                       autocomplete="off"
+                       aria-label="Rechercher une série">
+                <button type="button" onclick="handleSearch()">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+            <!-- Search Suggestions -->
+            <div class="search-suggestions" id="searchSuggestions">
+                <a href="/show/naruto" class="search-suggestion-item">
+                    <span class="suggestion-emoji">🍥</span>
+                    <div class="suggestion-text">
+                        <div class="suggestion-title">Naruto</div>
+                        <div class="suggestion-meta">220 épisodes • 40% fillers</div>
+                    </div>
+                    <i class="fas fa-chevron-right suggestion-arrow"></i>
+                </a>
+                <a href="/show/one-piece" class="search-suggestion-item">
+                    <span class="suggestion-emoji">☠️</span>
+                    <div class="suggestion-text">
+                        <div class="suggestion-title">One Piece</div>
+                        <div class="suggestion-meta">1000+ épisodes • 10% fillers</div>
+                    </div>
+                    <i class="fas fa-chevron-right suggestion-arrow"></i>
+                </a>
+                <a href="/show/stargate-sg1" class="search-suggestion-item">
+                    <span class="suggestion-emoji">⭕</span>
+                    <div class="suggestion-text">
+                        <div class="suggestion-title">Stargate SG-1</div>
+                        <div class="suggestion-meta">214 épisodes • 15% fillers</div>
+                    </div>
+                    <i class="fas fa-chevron-right suggestion-arrow"></i>
+                </a>
+            </div>
+        </div>
+        
+        <!-- Social Proof -->
+        <div class="social-proof">
+            <div class="social-proof-avatars">
+                <span>👤</span>
+                <span>👤</span>
+                <span>👤</span>
+            </div>
+            <span>Rejoint <strong>10,000+</strong> fans de séries</span>
         </div>
     </section>
+
+    <!-- Quick Filters -->
+    <div class="quick-filters">
+        <button class="filter-btn active" data-filter="all">
+            <i class="fas fa-th-large"></i> Tout
+        </button>
+        <button class="filter-btn" data-filter="popular">
+            <i class="fas fa-fire"></i> Populaire
+        </button>
+        <button class="filter-btn" data-filter="anime">
+            <i class="fas fa-dragon"></i> Anime
+        </button>
+        <button class="filter-btn" data-filter="scifi">
+            <i class="fas fa-rocket"></i> Sci-Fi
+        </button>
+        <button class="filter-btn" data-filter="drama">
+            <i class="fas fa-theater-masks"></i> Drama
+        </button>
+    </div>
 
     <!-- Stats Bar -->
     <div class="stats-bar">
@@ -1082,8 +1413,8 @@
             <div class="stat-label">Épisodes référencés</div>
         </div>
         <div class="stat">
-            <div class="stat-value">3</div>
-            <div class="stat-label">Niveaux de priorité</div>
+            <div class="stat-value">40%</div>
+            <div class="stat-label">Temps économisé</div>
         </div>
         <div class="stat">
             <div class="stat-value">100%</div>
@@ -1094,50 +1425,163 @@
     <!-- Shows Section -->
     <section class="section" id="shows">
         <div class="section-header">
-            <h2 class="section-title">Séries populaires <span>(3 épisodes gratuits)</span></h2>
+            <h2 class="section-title">Séries populaires <span>— Gratuit</span></h2>
+            <div class="view-toggle">
+                <button class="view-btn active" aria-label="Vue grille">
+                    <i class="fas fa-th-large"></i>
+                </button>
+                <button class="view-btn" aria-label="Vue liste">
+                    <i class="fas fa-list"></i>
+                </button>
+            </div>
         </div>
-        <div class="shows-grid">
-            <a href="/show/stargate-sg1" class="show-card">
-                <div class="show-poster">⭕</div>
+        <div class="shows-grid" id="showsGrid">
+            <!-- Show Card: Naruto -->
+            <a href="/show/naruto" class="show-card" data-category="anime popular">
+                <div class="show-poster" style="background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);">
+                    <span class="filler-badge low">⚠️ 40% fillers</span>
+                    🍥
+                </div>
+                <div class="show-info">
+                    <h3 class="show-title">Naruto</h3>
+                    <div class="show-meta">
+                        <span><i class="fas fa-tv"></i> 5 saisons</span>
+                        <span><i class="fas fa-film"></i> 220 ép</span>
+                    </div>
+                    <div class="show-tags">
+                        <span class="tag">Ninja</span>
+                        <span class="tag">Action</span>
+                    </div>
+                    <div class="show-progress-mini">
+                        <div class="progress-bar-mini">
+                            <div class="progress-fill-mini" style="width: 60%"></div>
+                        </div>
+                        <div class="progress-text-mini">132 épisodes essentiels</div>
+                    </div>
+                </div>
+            </a>
+            
+            <!-- Show Card: One Piece -->
+            <a href="/show/one-piece" class="show-card" data-category="anime popular">
+                <div class="show-poster" style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);">
+                    <span class="filler-badge high">✓ 10% fillers</span>
+                    ☠️
+                </div>
+                <div class="show-info">
+                    <h3 class="show-title">One Piece</h3>
+                    <div class="show-meta">
+                        <span><i class="fas fa-tv"></i> 20+ saisons</span>
+                        <span><i class="fas fa-film"></i> 1000+ ép</span>
+                    </div>
+                    <div class="show-tags">
+                        <span class="tag">Pirates</span>
+                        <span class="tag">Aventure</span>
+                    </div>
+                    <div class="show-progress-mini">
+                        <div class="progress-bar-mini">
+                            <div class="progress-fill-mini" style="width: 90%"></div>
+                        </div>
+                        <div class="progress-text-mini">~900 épisodes essentiels</div>
+                    </div>
+                </div>
+            </a>
+            
+            <!-- Show Card: Stargate SG-1 -->
+            <a href="/show/stargate-sg1" class="show-card" data-category="scifi popular">
+                <div class="show-poster" style="background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);">
+                    <span class="filler-badge high">✓ 15% fillers</span>
+                    ⭕
+                </div>
                 <div class="show-info">
                     <h3 class="show-title">Stargate SG-1</h3>
                     <div class="show-meta">
                         <span><i class="fas fa-tv"></i> 10 saisons</span>
-                        <span><i class="fas fa-film"></i> 214 épisodes</span>
+                        <span><i class="fas fa-film"></i> 214 ép</span>
                     </div>
                     <div class="show-tags">
                         <span class="tag">Sci-Fi</span>
                         <span class="tag">Action</span>
                     </div>
+                    <div class="show-progress-mini">
+                        <div class="progress-bar-mini">
+                            <div class="progress-fill-mini" style="width: 85%"></div>
+                        </div>
+                        <div class="progress-text-mini">182 épisodes essentiels</div>
+                    </div>
                 </div>
             </a>
             
-            <a href="/show/stargate-atlantis" class="show-card">
-                <div class="show-poster" style="background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);">🌌</div>
+            <!-- Show Card: Stargate Atlantis -->
+            <a href="/show/stargate-atlantis" class="show-card" data-category="scifi">
+                <div class="show-poster" style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);">
+                    <span class="filler-badge high">✓ 12% fillers</span>
+                    🌌
+                </div>
                 <div class="show-info">
                     <h3 class="show-title">Stargate Atlantis</h3>
                     <div class="show-meta">
                         <span><i class="fas fa-tv"></i> 5 saisons</span>
-                        <span><i class="fas fa-film"></i> 100 épisodes</span>
+                        <span><i class="fas fa-film"></i> 100 ép</span>
                     </div>
                     <div class="show-tags">
                         <span class="tag">Sci-Fi</span>
                         <span class="tag">Aventure</span>
                     </div>
+                    <div class="show-progress-mini">
+                        <div class="progress-bar-mini">
+                            <div class="progress-fill-mini" style="width: 88%"></div>
+                        </div>
+                        <div class="progress-text-mini">88 épisodes essentiels</div>
+                    </div>
                 </div>
             </a>
             
-            <a href="/show/breaking-bad" class="show-card" style="opacity: 0.6;">
-                <div class="show-poster" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">⚗️</div>
+            <!-- Show Card: Breaking Bad -->
+            <a href="/show/breaking-bad" class="show-card" data-category="drama popular">
+                <div class="show-poster" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                    <span class="filler-badge high">✓ 0% fillers</span>
+                    ⚗️
+                </div>
                 <div class="show-info">
                     <h3 class="show-title">Breaking Bad</h3>
                     <div class="show-meta">
                         <span><i class="fas fa-tv"></i> 5 saisons</span>
-                        <span><i class="fas fa-film"></i> 62 épisodes</span>
+                        <span><i class="fas fa-film"></i> 62 ép</span>
                     </div>
                     <div class="show-tags">
                         <span class="tag">Drame</span>
                         <span class="tag">Crime</span>
+                    </div>
+                    <div class="show-progress-mini">
+                        <div class="progress-bar-mini">
+                            <div class="progress-fill-mini" style="width: 100%"></div>
+                        </div>
+                        <div class="progress-text-mini">Tous les épisodes sont essentiels !</div>
+                    </div>
+                </div>
+            </a>
+            
+            <!-- Show Card: Attack on Titan -->
+            <a href="/show/attack-on-titan" class="show-card" data-category="anime popular">
+                <div class="show-poster" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);">
+                    <span class="filler-badge high">✓ 5% fillers</span>
+                    🗡️
+                </div>
+                <div class="show-info">
+                    <h3 class="show-title">Attack on Titan</h3>
+                    <div class="show-meta">
+                        <span><i class="fas fa-tv"></i> 4 saisons</span>
+                        <span><i class="fas fa-film"></i> 87 ép</span>
+                    </div>
+                    <div class="show-tags">
+                        <span class="tag">Dark</span>
+                        <span class="tag">Action</span>
+                    </div>
+                    <div class="show-progress-mini">
+                        <div class="progress-bar-mini">
+                            <div class="progress-fill-mini" style="width: 95%"></div>
+                        </div>
+                        <div class="progress-text-mini">~83 épisodes essentiels</div>
                     </div>
                 </div>
             </a>
@@ -1163,10 +1607,116 @@
             <div class="feature">
                 <div class="feature-icon">📱</div>
                 <h3>Gratuit et illimité</h3>
-                <p>Crée un compte gratuit pour accéder à tous les guides sans limitation.</p>
+                <p>Accès complet sans limitation. Crée un compte pour sauvegarder ta progression.</p>
             </div>
         </div>
     </section>
+
+    <!-- Limit Modal — UX Optimized -->
+    <div class="limit-modal" id="limitModal">
+        <div class="limit-content">
+            <div class="limit-emoji">🎉</div>
+            <h2>Tu as consulté 3 épisodes !</h2>
+            <p class="limit-subtitle">Prêt à débloquer tout le potentiel ?</p>
+            
+            <ul class="benefits-list">
+                <li>
+                    <span class="benefit-icon">✅</span>
+                    <span class="benefit-text">Accès <strong>illimité</strong> à tous les guides</span>
+                </li>
+                <li>
+                    <span class="benefit-icon">📊</span>
+                    <span class="benefit-text">Sauvegarde ta <strong>progression</strong></span>
+                </li>
+                <li>
+                    <span class="benefit-icon">⏱️</span>
+                    <span class="benefit-text">Voir ton <strong>temps économisé</strong></span>
+                </li>
+                <li>
+                    <span class="benefit-icon">🎁</span>
+                    <span class="benefit-text"><strong>100% gratuit</strong>, sans publicité</span>
+                </li>
+            </ul>
+            
+            <div class="limit-cta">
+                <button class="btn btn-primary" onclick="openSignup()">
+                    Créer un compte gratuit →
+                </button>
+                <p class="limit-secondary">
+                    Déjà membre ? <a href="/login">Connecte-toi</a>
+                </p>
+            </div>
+            
+            <div class="trust-badges">
+                <span class="trust-badge">🔒 Sécurisé</span>
+                <span class="trust-badge">⚡ 30 secondes</span>
+                <span class="trust-badge">✅ Gratuit</span>
+            </div>
+            
+            <button class="limit-close" onclick="closeLimitModal()">
+                Continuer sans compte
+            </button>
+        </div>
+    </div>
+
+    <!-- Onboarding Overlay -->
+    <div class="onboarding-overlay" id="onboarding">
+        <!-- Step 1: Welcome -->
+        <div class="onboarding-step active" data-step="1">
+            <div class="onboarding-visual">🎬</div>
+            <h2>Bienvenue sur Filler Tracker !</h2>
+            <p>Le guide ultime pour ne plus perdre de temps sur les épisodes inutiles.</p>
+            <button class="btn btn-primary" onclick="nextOnboardingStep(2)">
+                Commencer →
+            </button>
+            <div class="onboarding-dots">
+                <div class="onboarding-dot active"></div>
+                <div class="onboarding-dot"></div>
+                <div class="onboarding-dot"></div>
+            </div>
+        </div>
+        
+        <!-- Step 2: Show Selection -->
+        <div class="onboarding-step" data-step="2">
+            <div class="onboarding-visual">📺</div>
+            <h2>Quelle série regardes-tu ?</h2>
+            <p>On te préparera ton guide personnalisé.</p>
+            <div class="show-chips">
+                <button class="show-chip" onclick="selectShow('naruto')">🍥 Naruto</button>
+                <button class="show-chip" onclick="selectShow('one-piece')">☠️ One Piece</button>
+                <button class="show-chip" onclick="selectShow('stargate')">⭕ Stargate</button>
+                <button class="show-chip" onclick="selectShow('other')">🔍 Autre</button>
+            </div>
+            <div class="onboarding-dots">
+                <div class="onboarding-dot"></div>
+                <div class="onboarding-dot active"></div>
+                <div class="onboarding-dot"></div>
+            </div>
+        </div>
+        
+        <!-- Step 3: First Guide Preview -->
+        <div class="onboarding-step" data-step="3">
+            <div class="onboarding-visual">🎯</div>
+            <h2>Voici comment ça marche</h2>
+            <p>Chaque épisode est noté pour t'aider à décider.</p>
+            <div class="episode-preview">
+                <span class="ep-num">EP 1</span>
+                <span class="ep-badge must">À VOIR</span>
+                <span class="ep-title">Le début de l'aventure</span>
+            </div>
+            <div class="onboarding-tip">
+                💡 <strong>Astuce :</strong> Clique sur "Pourquoi ?" pour comprendre chaque notation.
+            </div>
+            <button class="btn btn-primary" onclick="finishOnboarding()">
+                C'est parti ! 🚀
+            </button>
+            <div class="onboarding-dots">
+                <div class="onboarding-dot"></div>
+                <div class="onboarding-dot"></div>
+                <div class="onboarding-dot active"></div>
+            </div>
+        </div>
+    </div>
 
     <!-- Footer -->
     <footer>
@@ -1180,11 +1730,13 @@
             <a href="#features">Fonctionnalités</a>
             <a href="/login">Connexion</a>
         </div>
-        <p class="copyright">© 2026 Filler Tracker. Données fournies par TMDB & TVDB.</p>
+        <p class="copyright">© 2026 Filler Tracker. Données fournies par TMDB.</p>
     </footer>
     
     <script>
-        // Mobile Menu Toggle
+        // ============================================
+        // MOBILE MENU
+        // ============================================
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const mobileNav = document.getElementById('mobileNav');
         let isMenuOpen = false;
@@ -1198,7 +1750,6 @@
             mobileMenuBtn.setAttribute('aria-expanded', isMenuOpen);
         });
         
-        // Close menu when clicking a link
         mobileNav.querySelectorAll('a').forEach(link => {
             link.addEventListener('click', () => {
                 isMenuOpen = false;
@@ -1208,7 +1759,6 @@
             });
         });
         
-        // Close menu when clicking outside
         document.addEventListener('click', (e) => {
             if (isMenuOpen && !mobileNav.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
                 isMenuOpen = false;
@@ -1218,7 +1768,174 @@
             }
         });
         
-        // Smooth scroll for anchor links
+        // ============================================
+        // HERO SEARCH — UX OPTIMIZED
+        // ============================================
+        const heroSearch = document.getElementById('heroSearch');
+        const searchSuggestions = document.getElementById('searchSuggestions');
+        
+        heroSearch.addEventListener('focus', () => {
+            searchSuggestions.classList.add('active');
+        });
+        
+        heroSearch.addEventListener('input', (e) => {
+            const value = e.target.value.toLowerCase();
+            const items = searchSuggestions.querySelectorAll('.search-suggestion-item');
+            
+            items.forEach(item => {
+                const title = item.querySelector('.suggestion-title').textContent.toLowerCase();
+                item.style.display = title.includes(value) ? 'flex' : 'none';
+            });
+        });
+        
+        heroSearch.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                handleSearch();
+            }
+        });
+        
+        // Close suggestions on click outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.hero-search-container')) {
+                searchSuggestions.classList.remove('active');
+            }
+        });
+        
+        function handleSearch() {
+            const query = heroSearch.value.toLowerCase();
+            if (query.includes('naruto')) {
+                window.location.href = '/show/naruto';
+            } else if (query.includes('one piece') || query.includes('onepiece')) {
+                window.location.href = '/show/one-piece';
+            } else if (query.includes('stargate')) {
+                window.location.href = '/show/stargate-sg1';
+            } else if (query.includes('breaking')) {
+                window.location.href = '/show/breaking-bad';
+            } else {
+                // Show no results or default behavior
+                document.getElementById('shows').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+        
+        // ============================================
+        // QUICK FILTERS
+        // ============================================
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const showCards = document.querySelectorAll('.show-card');
+        
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Update active state
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                const filter = btn.dataset.filter;
+                
+                // Filter cards
+                showCards.forEach(card => {
+                    if (filter === 'all' || card.dataset.category?.includes(filter)) {
+                        card.style.display = 'block';
+                        card.style.animation = 'staggerIn 0.5s ease-out forwards';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+        
+        // ============================================
+        // LIMIT MODAL — UX OPTIMIZED
+        // ============================================
+        const limitModal = document.getElementById('limitModal');
+        let episodeCount = 0;
+        
+        // Simulate episode views (in production, this would be tracked)
+        document.querySelectorAll('.show-card').forEach(card => {
+            card.addEventListener('click', (e) => {
+                episodeCount++;
+                if (episodeCount >= 3) {
+                    e.preventDefault();
+                    showLimitModal();
+                }
+            });
+        });
+        
+        function showLimitModal() {
+            limitModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeLimitModal() {
+            limitModal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        
+        function openSignup() {
+            window.location.href = '/signup';
+        }
+        
+        // Close modal on backdrop click
+        limitModal.addEventListener('click', (e) => {
+            if (e.target === limitModal) {
+                closeLimitModal();
+            }
+        });
+        
+        // Close on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && limitModal.classList.contains('active')) {
+                closeLimitModal();
+            }
+        });
+        
+        // ============================================
+        // ONBOARDING
+        // ============================================
+        const onboarding = document.getElementById('onboarding');
+        let currentStep = 1;
+        
+        // Check if user is new (in production, check localStorage/cookie)
+        // For demo, we'll skip auto-show but provide the functionality
+        // Uncomment to enable: if (!localStorage.getItem('fillerTrackerOnboarded')) showOnboarding();
+        
+        function showOnboarding() {
+            onboarding.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function nextOnboardingStep(step) {
+            document.querySelector(`.onboarding-step[data-step="${currentStep}"]`).classList.remove('active');
+            currentStep = step;
+            document.querySelector(`.onboarding-step[data-step="${currentStep}"]`).classList.add('active');
+        }
+        
+        function selectShow(show) {
+            localStorage.setItem('fillerTrackerPreferredShow', show);
+            nextOnboardingStep(3);
+        }
+        
+        function finishOnboarding() {
+            localStorage.setItem('fillerTrackerOnboarded', 'true');
+            onboarding.classList.remove('active');
+            document.body.style.overflow = '';
+            
+            // Redirect to preferred show if selected
+            const preferredShow = localStorage.getItem('fillerTrackerPreferredShow');
+            if (preferredShow && preferredShow !== 'other') {
+                const showMap = {
+                    'naruto': '/show/naruto',
+                    'one-piece': '/show/one-piece',
+                    'stargate': '/show/stargate-sg1'
+                };
+                if (showMap[preferredShow]) {
+                    window.location.href = showMap[preferredShow];
+                }
+            }
+        }
+        
+        // ============================================
+        // SMOOTH SCROLL
+        // ============================================
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -1232,7 +1949,9 @@
             });
         });
         
-        // Active nav link on scroll
+        // ============================================
+        // ACTIVE NAV LINK ON SCROLL
+        // ============================================
         const sections = document.querySelectorAll('section[id]');
         window.addEventListener('scroll', () => {
             let current = '';
@@ -1249,6 +1968,37 @@
                     (current === '' && link.getAttribute('href') === '/')) {
                     link.classList.add('active');
                 }
+            });
+        });
+        
+        // ============================================
+        // ANALYTICS / TRACKING
+        // ============================================
+        // Track key events for funnel analysis
+        function trackEvent(eventName, properties = {}) {
+            // In production, send to analytics (Google Analytics, Mixpanel, etc.)
+            console.log('[Analytics]', eventName, properties);
+        }
+        
+        // Track page view
+        trackEvent('page_view', { page: 'home' });
+        
+        // Track search usage
+        heroSearch.addEventListener('focus', () => {
+            trackEvent('search_focus');
+        });
+        
+        // Track filter usage
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                trackEvent('filter_click', { filter: btn.dataset.filter });
+            });
+        });
+        
+        // Track show clicks
+        showCards.forEach(card => {
+            card.addEventListener('click', () => {
+                trackEvent('show_click', { show: card.querySelector('.show-title').textContent });
             });
         });
     </script>
