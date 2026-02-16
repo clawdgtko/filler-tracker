@@ -618,12 +618,13 @@ async function renderHome(tmdb, lang, tmdbLang) {
       
       .shows-grid {
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(4, minmax(0, 1fr));
         gap: 20px;
       }
       
       .show-card {
         display: flex;
+        min-width: 0;
         flex-direction: column;
         text-decoration: none;
         color: var(--text);
@@ -713,16 +714,16 @@ async function renderHome(tmdb, lang, tmdbLang) {
       }
       
       @media (max-width: 1200px) {
-        .shows-grid { grid-template-columns: repeat(3, 1fr); }
+        .shows-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
       }
       
       @media (max-width: 900px) {
-        .shows-grid { grid-template-columns: repeat(2, 1fr); }
+        .shows-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       }
       
       @media (max-width: 600px) {
         .hero h1 { font-size: 2.5rem; }
-        .shows-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+        .shows-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
         .show-info { padding: 10px; margin-top: 8px; border-radius: 8px; }
         .show-title { font-size: 0.85rem; }
         .show-meta { font-size: 0.7rem; gap: 6px; }
@@ -951,12 +952,13 @@ async function renderAnime(tmdb, lang, tmdbLang) {
       
       .shows-grid {
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(4, minmax(0, 1fr));
         gap: 20px;
       }
       
       .show-card {
         display: flex;
+        min-width: 0;
         flex-direction: column;
         text-decoration: none;
         color: var(--text);
@@ -1046,16 +1048,16 @@ async function renderAnime(tmdb, lang, tmdbLang) {
       }
       
       @media (max-width: 1200px) {
-        .shows-grid { grid-template-columns: repeat(3, 1fr); }
+        .shows-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
       }
       
       @media (max-width: 900px) {
-        .shows-grid { grid-template-columns: repeat(2, 1fr); }
+        .shows-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       }
       
       @media (max-width: 600px) {
         .hero h1 { font-size: 2.5rem; }
-        .shows-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+        .shows-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
         .show-info { padding: 10px; margin-top: 8px; border-radius: 8px; }
         .show-title { font-size: 0.85rem; }
         .show-meta { font-size: 0.7rem; gap: 6px; }
