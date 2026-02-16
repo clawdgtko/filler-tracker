@@ -151,7 +151,169 @@ const SHOWS_DB = {
   'game-of-thrones': { tmdbId: 1399 },
   'stranger-things': { tmdbId: 66732 },
   'the-simpsons': { tmdbId: 456 },
-  'sherlock': { tmdbId: 19885 }
+  'sherlock': { tmdbId: 19885 },
+  
+  // Anime
+  'naruto': {
+    tmdbId: 46260,
+    guides: {
+      fr: {
+        s1: [
+          { ep: 1, type: "must-watch", note: "Entrée à l'académie" },
+          { ep: 2, type: "must-watch", note: "Le client de Konoha" },
+          { ep: 3, type: "optional", note: "L'ennemi de Sasuke" },
+          { ep: 4, type: "optional", note: "Pass or Fail" },
+          { ep: 5, type: "must-watch", note: "Échec ? Kakashi vs Naruto" },
+          { ep: 6, type: "must-watch", note: "Mission de rang C" },
+          { ep: 7, type: "must-watch", note: "L'assassin dans la brume" },
+          { ep: 8, type: "must-watch", note: "Le vœu de Naruto" }
+        ]
+      }
+    }
+  },
+  'naruto-shippuden': {
+    tmdbId: 31910,
+    guides: {
+      fr: {
+        s1: [
+          { ep: 1, type: "must-watch", note: "Retour à Konoha" },
+          { ep: 2, type: "must-watch", note: "Les Akatsuki se déploient" },
+          { ep: 3, type: "skip", note: "Résultats de l'examen" },
+          { ep: 4, type: "skip", note: "Les résultats" }
+        ]
+      }
+    }
+  },
+  'one-piece': {
+    tmdbId: 37854,
+    guides: {
+      fr: {
+        s1: [
+          { ep: 1, type: "must-watch", note: "Je suis Luffy ! Je deviendrai le roi des pirates !" },
+          { ep: 2, type: "must-watch", note: "Le grand escrimeur" },
+          { ep: 3, type: "must-watch", note: "Morgan vs Luffy" },
+          { ep: 4, type: "optional", note: "Luffy passe à l'attaque" }
+        ]
+      }
+    }
+  },
+  'bleach': {
+    tmdbId: 30984,
+    guides: {
+      fr: {
+        s1: [
+          { ep: 1, type: "must-watch", note: "Le jour où je suis devenu Shinigami" },
+          { ep: 2, type: "must-watch", note: "Le travail d'un Shinigami" },
+          { ep: 3, type: "must-watch", note: "Le frère disparu, la sœur retrouvée" },
+          { ep: 4, type: "optional", note: "Le crieur de pierre" }
+        ]
+      }
+    }
+  },
+  'attack-on-titan': {
+    tmdbId: 1429,
+    guides: {
+      fr: {
+        s1: [
+          { ep: 1, type: "must-watch", note: "À toi, 2000 ans dans le futur" },
+          { ep: 2, type: "must-watch", note: "Ce jour-là" },
+          { ep: 3, type: "must-watch", note: "Une triste nuit" },
+          { ep: 4, type: "must-watch", note: "Première sortie" }
+        ]
+      }
+    }
+  },
+  'my-hero-academia': {
+    tmdbId: 65930,
+    guides: {
+      fr: {
+        s1: [
+          { ep: 1, type: "must-watch", note: "Izuku Midoriya : Les origines" },
+          { ep: 2, type: "must-watch", note: "Les qualifications pour être un héros" },
+          { ep: 3, type: "must-watch", note: "Le grondement des muscles" },
+          { ep: 4, type: "must-watch", note: "La ligne de départ" }
+        ]
+      }
+    }
+  },
+  'demon-slayer': {
+    tmdbId: 85937,
+    guides: {
+      fr: {
+        s1: [
+          { ep: 1, type: "must-watch", note: "Cruauté" },
+          { ep: 2, type: "must-watch", note: "Le mentor Sakonji Urokodaki" },
+          { ep: 3, type: "must-watch", note: "Sabito et Makomo" },
+          { ep: 4, type: "must-watch", note: "Première mission" }
+        ]
+      }
+    }
+  },
+  'dragon-ball-z': {
+    tmdbId: 12971,
+    guides: {
+      fr: {
+        s1: [
+          { ep: 1, type: "must-watch", note: "Arrivée de Raditz" },
+          { ep: 2, type: "must-watch", note: "Le frère de Goku" },
+          { ep: 3, type: "must-watch", note: "L'entraînement de Piccolo" },
+          { ep: 4, type: "optional", note: "Run Gohan !" }
+        ]
+      }
+    }
+  },
+  'death-note': {
+    tmdbId: 13916,
+    guides: {
+      fr: {
+        s1: [
+          { ep: 1, type: "must-watch", note: "Renaissance" },
+          { ep: 2, type: "must-watch", note: "Confrontation" },
+          { ep: 3, type: "must-watch", note: "Dealings" },
+          { ep: 4, type: "must-watch", note: "Poursuite" }
+        ]
+      }
+    }
+  },
+  'fullmetal-alchemist-brotherhood': {
+    tmdbId: 31911,
+    guides: {
+      fr: {
+        s1: [
+          { ep: 1, type: "must-watch", note: "Fullmetal Alchemist" },
+          { ep: 2, type: "must-watch", note: "Le premier jour" },
+          { ep: 3, type: "must-watch", note: "La cité des péchés" },
+          { ep: 4, type: "must-watch", note: "L'alchimiste au bras d'acier" }
+        ]
+      }
+    }
+  },
+  'hunter-x-hunter': {
+    tmdbId: 46298,
+    guides: {
+      fr: {
+        s1: [
+          { ep: 1, type: "must-watch", note: "Le départ x et x les amis" },
+          { ep: 2, type: "must-watch", note: "Les épreuves du Hunter" },
+          { ep: 3, type: "must-watch", note: "La rivale x et x l'accident" },
+          { ep: 4, type: "must-watch", note: "Espoir x et x Ambition" }
+        ]
+      }
+    }
+  },
+  'jujutsu-kaisen': {
+    tmdbId: 90462,
+    guides: {
+      fr: {
+        s1: [
+          { ep: 1, type: "must-watch", note: "Ryomen Sukuna" },
+          { ep: 2, type: "must-watch", note: "Pour moi-même" },
+          { ep: 3, type: "must-watch", note: "Fille de l'acier" },
+          { ep: 4, type: "must-watch", note: "La malédiction de la matière" }
+        ]
+      }
+    }
+  }
 };
 
 // TMDB API client
@@ -202,6 +364,10 @@ export default {
     
     if (path === '/' || path === '/index.html') {
       return renderHome(tmdb, lang, tmdbLang);
+    }
+    
+    if (path === '/anime') {
+      return renderAnime(tmdb, lang, tmdbLang);
     }
     
     if (path.startsWith('/show/')) {
@@ -564,8 +730,8 @@ async function renderHome(tmdb, lang, tmdbLang) {
     <nav class="nav">
         <a href="/" class="logo">Filler<span>.</span></a>
         <div class="nav-links">
-            <a href="/">${lang === 'fr' ? 'Accueil' : 'Home'}</a>
-            <a href="#shows">${lang === 'fr' ? 'Séries' : 'Shows'}</a>
+            <a href="/" class="active">${lang === 'fr' ? 'Accueil' : 'Home'}</a>
+            <a href="/anime">${lang === 'fr' ? 'Anime' : 'Anime'}</a>
             <button class="lang-switch" onclick="toggleLang()">${t.langLabel}</button>
         </div>
     </nav>
@@ -587,6 +753,322 @@ async function renderHome(tmdb, lang, tmdbLang) {
         <div class="section-header">
             <h2>${t.popular} <span>— ${t.free}</span></h2>
         </div>
+        <div class="shows-grid">
+            ${showsHtml}
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2026 Filler Tracker — Données TMDB</p>
+    </footer>
+    
+    <script>
+        function toggleLang() {
+            const newLang = document.documentElement.lang === 'fr' ? 'en' : 'fr';
+            fetch('/api/set-language?lang=' + newLang).then(() => location.reload());
+        }
+    </script>
+</body>
+</html>`;
+
+  return new Response(html, { headers: { 'Content-Type': 'text/html; charset=utf-8' } });
+}
+
+async function renderAnime(tmdb, lang, tmdbLang) {
+  const t = {
+    fr: {
+      title: 'Anime — Guides d\'épisodes',
+      subtitle: 'Les meilleurs anime avec guides anti-filler. Naruto, One Piece, Attack on Titan et plus.',
+      badge: 'Nouveau',
+      langLabel: 'FR',
+      anime: 'Anime'
+    },
+    en: {
+      title: 'Anime — Episode Guides',
+      subtitle: 'Best anime with filler guides. Naruto, One Piece, Attack on Titan and more.',
+      badge: 'New',
+      langLabel: 'EN',
+      anime: 'Anime'
+    }
+  }[lang];
+  
+  const animeIds = ['naruto', 'naruto-shippuden', 'one-piece', 'bleach', 'attack-on-titan', 
+                   'my-hero-academia', 'demon-slayer', 'dragon-ball-z', 'death-note', 
+                   'fullmetal-alchemist-brotherhood', 'hunter-x-hunter', 'jujutsu-kaisen'];
+  
+  const showsData = [];
+  for (const id of animeIds) {
+    try {
+      const data = await tmdb.getShow(SHOWS_DB[id].tmdbId, tmdbLang);
+      showsData.push({
+        id,
+        name: data.name,
+        overview: data.overview,
+        poster: tmdb.getPoster(data.poster_path, 'w342'),
+        year: data.first_air_date?.split('-')[0] || 'N/A',
+        seasons: data.number_of_seasons,
+        rating: data.vote_average?.toFixed(1)
+      });
+    } catch (e) {
+      console.error(`Failed to fetch ${id}:`, e);
+    }
+  }
+  
+  const showsHtml = showsData.map(show => `
+    <a href="/show/${show.id}" class="show-card">
+        <div class="show-poster" style="background-image: url('${show.poster || ''}');">
+            ${!show.poster ? '<span style="font-size: 3rem;">📺</span>' : ''}
+        </div>
+        <div class="show-info">
+            <h3 class="show-title">${show.name}</h3>
+            <p class="show-meta">${show.year} • ${show.seasons}S <span class="show-rating-inline">⭐ ${show.rating}</span></p>
+        </div>
+    </a>
+  `).join('');
+  
+  const html = `<!DOCTYPE html>
+<html lang="${lang}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${t.title}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        --bg: #0c0c0c;
+        --surface: #141414;
+        --surface-hover: #1a1a1a;
+        --border: #222;
+        --text: #f5f5f5;
+        --text-muted: #888;
+        --accent: #ff6b35;
+      }
+      
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      
+      body {
+        font-family: 'Inter', system-ui, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        line-height: 1.6;
+      }
+      
+      .nav {
+        position: fixed;
+        top: 0; left: 0; right: 0;
+        height: 64px;
+        background: rgba(12, 12, 12, 0.95);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 48px;
+        z-index: 100;
+      }
+      
+      .logo {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: var(--text);
+        text-decoration: none;
+      }
+      
+      .logo span { color: var(--accent); }
+      
+      .nav-links {
+        display: flex;
+        gap: 32px;
+        align-items: center;
+      }
+      
+      .nav-links a {
+        color: var(--text-muted);
+        text-decoration: none;
+        font-size: 0.9rem;
+        font-weight: 500;
+        transition: color 0.2s;
+      }
+      
+      .nav-links a:hover, .nav-links a.active { color: var(--text); }
+      
+      .lang-switch {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        color: var(--text);
+        padding: 6px 12px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.85rem;
+      }
+      
+      .hero {
+        padding: 140px 48px 60px;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      
+      .badge {
+        display: inline-block;
+        padding: 6px 14px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        font-size: 0.8rem;
+        color: var(--accent);
+        font-weight: 500;
+        margin-bottom: 24px;
+      }
+      
+      .hero h1 {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 3.5rem;
+        font-weight: 700;
+        line-height: 1.1;
+        letter-spacing: -2px;
+        margin-bottom: 20px;
+      }
+      
+      .hero p {
+        font-size: 1.15rem;
+        color: var(--text-muted);
+        max-width: 600px;
+      }
+      
+      .section {
+        padding: 40px 48px 80px;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      
+      .shows-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+      }
+      
+      .show-card {
+        display: flex;
+        flex-direction: column;
+        text-decoration: none;
+        color: var(--text);
+        transition: all 0.3s ease;
+      }
+      
+      .show-card:hover {
+        transform: translateY(-4px);
+      }
+      
+      .show-card:hover .show-poster {
+        box-shadow: 0 16px 50px rgba(0,0,0,0.5);
+        transform: scale(1.02);
+      }
+      
+      .show-card:hover .show-info {
+        background: rgba(40, 40, 40, 0.8);
+        border-color: rgba(255,107,53,0.2);
+      }
+      
+      .show-poster {
+        aspect-ratio: 2/3;
+        border-radius: 12px;
+        background-size: cover;
+        background-position: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+        transition: all 0.3s ease;
+        overflow: hidden;
+        position: relative;
+        z-index: 5;
+      }
+      
+      .show-info {
+        margin-top: -20px;
+        margin-left: 8px;
+        margin-right: 8px;
+        padding: 16px;
+        padding-top: 24px;
+        background: rgba(30, 30, 30, 0.7);
+        backdrop-filter: blur(16px);
+        border-radius: 12px;
+        border: 1px solid rgba(255,255,255,0.08);
+        position: relative;
+        z-index: 10;
+        box-shadow: 0 -4px 20px rgba(0,0,0,0.3);
+      }
+      
+      .show-title {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: 4px;
+        line-height: 1.3;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      
+      .show-meta {
+        color: var(--text-muted);
+        font-size: 0.8rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      
+      .show-rating-inline {
+        color: var(--accent);
+        font-weight: 600;
+      }
+      
+      footer {
+        padding: 48px;
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.85rem;
+        border-top: 1px solid var(--border);
+      }
+      
+      @media (max-width: 1200px) {
+        .shows-grid { grid-template-columns: repeat(3, 1fr); }
+      }
+      
+      @media (max-width: 900px) {
+        .shows-grid { grid-template-columns: repeat(2, 1fr); }
+      }
+      
+      @media (max-width: 600px) {
+        .hero h1 { font-size: 2.5rem; }
+        .shows-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+        .show-info { padding: 10px; margin-top: 8px; border-radius: 8px; }
+        .show-title { font-size: 0.85rem; }
+        .show-meta { font-size: 0.7rem; gap: 6px; }
+        .nav { padding: 0 24px; }
+        .hero, .section { padding-left: 24px; padding-right: 24px; }
+      }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <a href="/" class="logo">Filler<span>.</span></a>
+        <div class="nav-links">
+            <a href="/">${lang === 'fr' ? 'Accueil' : 'Home'}</a>
+            <a href="/anime" class="active">${t.anime}</a>
+            <button class="lang-switch" onclick="toggleLang()">${t.langLabel}</button>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="badge">${t.badge}</div>
+        <h1>${t.title}</h1>
+        <p>${t.subtitle}</p>
+    </section>
+
+    <section class="section">
         <div class="shows-grid">
             ${showsHtml}
         </div>
@@ -1022,6 +1504,7 @@ async function renderShow(showId, seasonNum, tmdb, lang, tmdbLang) {
         <a href="/" class="logo">Filler<span>.</span></a>
         <div class="nav-links">
             <a href="/">${lang === 'fr' ? 'Accueil' : 'Home'}</a>
+            <a href="/anime">${lang === 'fr' ? 'Anime' : 'Anime'}</a>
         </div>
     </nav>
     
