@@ -680,12 +680,77 @@ async function renderHome(tmdb, lang, tmdbLang) {
       
       * { margin: 0; padding: 0; box-sizing: border-box; }
       
+      /* ========== ANIMATIONS CSS #86 ========== */
+      @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+      @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+      @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+      @keyframes staggerIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+      @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.85; } }
+      
       body {
         font-family: 'Inter', system-ui, sans-serif;
         background: var(--bg);
         color: var(--text);
         line-height: 1.6;
+        animation: fadeIn 0.4s ease-out;
       }
+      
+      .hero { animation: fadeInUp 0.5s ease-out 0.1s both; }
+      .hero h1 { animation: fadeInUp 0.5s ease-out 0.2s both; }
+      .hero p { animation: fadeInUp 0.5s ease-out 0.3s both; }
+      .stats { animation: fadeInUp 0.5s ease-out 0.4s both; }
+      .section-header { animation: fadeInUp 0.5s ease-out 0.5s both; }
+      
+      .show-card {
+        opacity: 0;
+        animation: staggerIn 0.4s ease-out forwards;
+        transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease;
+        will-change: transform;
+      }
+      
+      .show-card:nth-child(1) { animation-delay: 0.1s; }
+      .show-card:nth-child(2) { animation-delay: 0.15s; }
+      .show-card:nth-child(3) { animation-delay: 0.2s; }
+      .show-card:nth-child(4) { animation-delay: 0.25s; }
+      .show-card:nth-child(5) { animation-delay: 0.3s; }
+      .show-card:nth-child(6) { animation-delay: 0.35s; }
+      .show-card:nth-child(7) { animation-delay: 0.4s; }
+      .show-card:nth-child(8) { animation-delay: 0.45s; }
+      .show-card:nth-child(9) { animation-delay: 0.5s; }
+      .show-card:nth-child(10) { animation-delay: 0.55s; }
+      .show-card:nth-child(11) { animation-delay: 0.6s; }
+      .show-card:nth-child(12) { animation-delay: 0.65s; }
+      
+      .show-card:hover {
+        transform: translateY(-6px) scale(1.02);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+      }
+      
+      .show-card:active { transform: scale(0.98); }
+      
+      .btn {
+        transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+        will-change: transform;
+      }
+      
+      .btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(255,107,53,0.3); }
+      .btn:active { transform: scale(0.97); }
+      
+      .badge { animation: pulse 3s ease-in-out infinite; }
+      
+      .shimmer {
+        background: linear-gradient(90deg, var(--surface) 25%, var(--surface-hover) 50%, var(--surface) 75%);
+        background-size: 200% 100%;
+        animation: shimmer 1.5s infinite;
+      }
+      
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+          animation-duration: 0.01ms !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+      /* ========== END ANIMATIONS ========== */
       
       .nav {
         position: fixed;
@@ -1187,12 +1252,69 @@ async function renderAnime(tmdb, lang, tmdbLang) {
       
       * { margin: 0; padding: 0; box-sizing: border-box; }
       
+      /* ========== ANIMATIONS CSS #86 ========== */
+      @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+      @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+      @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+      @keyframes staggerIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+      @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.85; } }
+      
       body {
         font-family: 'Inter', system-ui, sans-serif;
         background: var(--bg);
         color: var(--text);
         line-height: 1.6;
+        animation: fadeIn 0.4s ease-out;
       }
+      
+      .hero { animation: fadeInUp 0.5s ease-out 0.1s both; }
+      .hero h1 { animation: fadeInUp 0.5s ease-out 0.2s both; }
+      .hero p { animation: fadeInUp 0.5s ease-out 0.3s both; }
+      
+      .show-card {
+        opacity: 0;
+        animation: staggerIn 0.4s ease-out forwards;
+        transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease;
+        will-change: transform;
+      }
+      
+      .show-card:nth-child(1) { animation-delay: 0.1s; }
+      .show-card:nth-child(2) { animation-delay: 0.15s; }
+      .show-card:nth-child(3) { animation-delay: 0.2s; }
+      .show-card:nth-child(4) { animation-delay: 0.25s; }
+      .show-card:nth-child(5) { animation-delay: 0.3s; }
+      .show-card:nth-child(6) { animation-delay: 0.35s; }
+      .show-card:nth-child(7) { animation-delay: 0.4s; }
+      .show-card:nth-child(8) { animation-delay: 0.45s; }
+      .show-card:nth-child(9) { animation-delay: 0.5s; }
+      .show-card:nth-child(10) { animation-delay: 0.55s; }
+      .show-card:nth-child(11) { animation-delay: 0.6s; }
+      .show-card:nth-child(12) { animation-delay: 0.65s; }
+      
+      .show-card:hover {
+        transform: translateY(-6px) scale(1.02);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+      }
+      
+      .show-card:active { transform: scale(0.98); }
+      
+      .btn {
+        transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+        will-change: transform;
+      }
+      
+      .btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(255,107,53,0.3); }
+      .btn:active { transform: scale(0.97); }
+      
+      .badge { animation: pulse 3s ease-in-out infinite; }
+      
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+          animation-duration: 0.01ms !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+      /* ========== END ANIMATIONS ========== */
       
       .nav {
         position: fixed;
@@ -1666,12 +1788,84 @@ async function renderShow(showId, seasonNum, tmdb, lang, tmdbLang) {
       
       * { margin: 0; padding: 0; box-sizing: border-box; }
       
+      /* ========== ANIMATIONS CSS #86 ========== */
+      @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+      @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+      @keyframes slideInLeft { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
+      @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+      
       body {
         font-family: 'Inter', system-ui, sans-serif;
         background: var(--bg);
         color: var(--text);
         line-height: 1.6;
+        animation: fadeIn 0.4s ease-out;
       }
+      
+      .hero-backdrop { animation: fadeIn 0.6s ease-out; }
+      .container { animation: fadeInUp 0.5s ease-out 0.2s both; }
+      .show-header { animation: slideInLeft 0.5s ease-out 0.3s both; }
+      .season-selector { animation: fadeInUp 0.4s ease-out 0.4s both; }
+      
+      .episode {
+        opacity: 0;
+        animation: fadeInUp 0.4s ease-out forwards;
+        transition: transform 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+      }
+      
+      .episode:nth-child(1) { animation-delay: 0.1s; }
+      .episode:nth-child(2) { animation-delay: 0.15s; }
+      .episode:nth-child(3) { animation-delay: 0.2s; }
+      .episode:nth-child(4) { animation-delay: 0.25s; }
+      .episode:nth-child(5) { animation-delay: 0.3s; }
+      .episode:nth-child(6) { animation-delay: 0.35s; }
+      .episode:nth-child(7) { animation-delay: 0.4s; }
+      .episode:nth-child(8) { animation-delay: 0.45s; }
+      .episode:nth-child(9) { animation-delay: 0.5s; }
+      .episode:nth-child(10) { animation-delay: 0.55s; }
+      
+      .episode:hover {
+        transform: translateX(4px);
+        border-color: rgba(255,107,53,0.3);
+      }
+      
+      .season-btn {
+        transition: all 0.2s ease;
+      }
+      
+      .season-btn:hover {
+        transform: translateY(-2px);
+        border-color: var(--accent);
+      }
+      
+      .season-btn.active {
+        transform: scale(1.05);
+      }
+      
+      .expand-all-btn, .ep-toggle {
+        transition: all 0.2s ease;
+      }
+      
+      .expand-all-btn:hover, .ep-toggle:hover {
+        transform: translateY(-1px);
+      }
+      
+      .back-link {
+        transition: all 0.2s ease;
+      }
+      
+      .back-link:hover {
+        transform: translateX(-4px);
+        color: var(--text);
+      }
+      
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+          animation-duration: 0.01ms !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+      /* ========== END ANIMATIONS ========== */
       
       .nav {
         position: fixed;
