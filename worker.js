@@ -645,18 +645,24 @@ async function renderHome(tmdb, lang, tmdbLang) {
       }
       
       .show-poster {
-        aspect-ratio: 2/3;
+        width: 100%;
+        height: 0;
+        padding-bottom: 150%; /* Ratio 2:3 exact - toutes les jaquettes même taille */
         border-radius: 12px;
         background-size: cover;
         background-position: center;
-        display: flex;
-        align-items: center;
-        justify-content: center;
         box-shadow: 0 8px 30px rgba(0,0,0,0.4);
         transition: all 0.3s ease;
         overflow: hidden;
         position: relative;
         z-index: 5;
+      }
+      
+      .show-poster span {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
       }
       
       .show-info {
@@ -972,18 +978,24 @@ async function renderAnime(tmdb, lang, tmdbLang) {
       }
       
       .show-poster {
-        aspect-ratio: 2/3;
+        width: 100%;
+        height: 0;
+        padding-bottom: 150%; /* Ratio 2:3 exact - toutes les jaquettes même taille */
         border-radius: 12px;
         background-size: cover;
         background-position: center;
-        display: flex;
-        align-items: center;
-        justify-content: center;
         box-shadow: 0 8px 30px rgba(0,0,0,0.4);
         transition: all 0.3s ease;
         overflow: hidden;
         position: relative;
         z-index: 5;
+      }
+      
+      .show-poster span {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
       }
       
       .show-info {
