@@ -646,8 +646,8 @@ async function renderHome(tmdb, lang, tmdbLang) {
       
       .show-poster {
         width: 100%;
-        height: 0;
-        padding-bottom: 150%; /* Ratio 2:3 exact - toutes les jaquettes même taille */
+        height: auto;
+        aspect-ratio: 2 / 3;
         border-radius: 12px;
         background-size: cover;
         background-position: center;
@@ -979,8 +979,8 @@ async function renderAnime(tmdb, lang, tmdbLang) {
       
       .show-poster {
         width: 100%;
-        height: 0;
-        padding-bottom: 150%; /* Ratio 2:3 exact - toutes les jaquettes même taille */
+        height: auto;
+        aspect-ratio: 2 / 3;
         border-radius: 12px;
         background-size: cover;
         background-position: center;
