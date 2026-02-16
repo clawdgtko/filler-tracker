@@ -659,7 +659,8 @@ async function renderHome(tmdb, lang, tmdbLang) {
 <html lang="${lang}">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+    <meta name="theme-color" content="#0c0c0c">
     <title>Filler Tracker — Episode Guides</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
@@ -730,10 +731,73 @@ async function renderHome(tmdb, lang, tmdbLang) {
         background: var(--surface);
         border: 1px solid var(--border);
         color: var(--text);
-        padding: 6px 12px;
+        padding: 8px 14px;
         border-radius: 4px;
         cursor: pointer;
         font-size: 0.85rem;
+        min-height: 36px;
+        min-width: 44px;
+      }
+      
+      /* Mobile Menu */
+      .mobile-menu-btn {
+        display: none;
+        width: 44px;
+        height: 44px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        color: var(--text);
+        font-size: 1.1rem;
+        cursor: pointer;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+        -webkit-tap-highlight-color: rgba(255, 107, 53, 0.3);
+      }
+      
+      .mobile-menu-btn:hover { background: var(--surface-hover); border-color: var(--accent); }
+      .mobile-menu-btn:active { transform: scale(0.95); }
+      
+      .mobile-nav {
+        display: none;
+        position: fixed;
+        top: 64px;
+        left: 0; right: 0;
+        background: rgba(12, 12, 12, 0.98);
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid var(--border);
+        padding: 12px;
+        z-index: 99;
+        transform: translateY(-100%);
+        opacity: 0;
+        transition: all 0.25s ease;
+      }
+      
+      .mobile-nav.active { transform: translateY(0); opacity: 1; }
+      
+      .mobile-nav a, .mobile-nav button {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+        padding: 16px;
+        color: var(--text-muted);
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 1rem;
+        border-radius: 8px;
+        transition: all 0.2s;
+        min-height: 56px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        text-align: left;
+      }
+      
+      .mobile-nav a:hover, .mobile-nav a.active, .mobile-nav button:hover {
+        background: var(--surface);
+        color: var(--text);
       }
       
       .hero {
@@ -933,15 +997,34 @@ async function renderHome(tmdb, lang, tmdbLang) {
         .shows-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       }
       
-      @media (max-width: 600px) {
-        .hero h1 { font-size: 2.5rem; }
-        .shows-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-        .show-info { padding: 10px; margin-top: 8px; border-radius: 8px; }
-        .show-title { font-size: 0.85rem; }
-        .show-meta { font-size: 0.7rem; gap: 6px; }
-        .stats { flex-direction: column; gap: 24px; }
-        .nav { padding: 0 24px; }
-        .hero, .section { padding-left: 24px; padding-right: 24px; }
+      @media (max-width: 768px) {
+        .nav { padding: 0 20px; height: 60px; }
+        .nav-links { display: none; }
+        .mobile-menu-btn { display: flex; }
+        .mobile-nav { display: block; top: 60px; }
+        .hero { padding: 100px 20px 60px; }
+        .hero h1 { font-size: 2rem; letter-spacing: -1px; }
+        .hero p { font-size: 1rem; }
+        .stats { flex-direction: column; gap: 20px; padding: 30px 20px; }
+        .section { padding: 40px 20px; }
+        footer { padding: 40px 20px; }
+      }
+      
+      @media (max-width: 480px) {
+        .hero h1 { font-size: 1.6rem; }
+        .shows-grid { grid-template-columns: 1fr; }
+        .btn { width: 100%; justify-content: center; min-height: 52px; }
+      }
+      
+      @supports (padding-top: env(safe-area-inset-top)) {
+        .nav { padding-top: env(safe-area-inset-top); height: calc(64px + env(safe-area-inset-top)); }
+        .mobile-nav { top: calc(64px + env(safe-area-inset-top)); }
+        .hero { padding-top: calc(140px + env(safe-area-inset-top)); }
+        @media (max-width: 768px) {
+          .nav { height: calc(60px + env(safe-area-inset-top)); }
+          .mobile-nav { top: calc(60px + env(safe-area-inset-top)); }
+          .hero { padding-top: calc(100px + env(safe-area-inset-top)); }
+        }
       }
     </style>
 </head>
@@ -953,7 +1036,14 @@ async function renderHome(tmdb, lang, tmdbLang) {
             <a href="/anime">${lang === 'fr' ? 'Anime' : 'Anime'}</a>
             <button class="lang-switch" onclick="toggleLang()">${t.langLabel}</button>
         </div>
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu">☰</button>
     </nav>
+    
+    <div class="mobile-nav" id="mobileNav">
+        <a href="/" class="active">${lang === 'fr' ? '🏠 Accueil' : '🏠 Home'}</a>
+        <a href="/anime">📺 ${lang === 'fr' ? 'Anime' : 'Anime'}</a>
+        <button onclick="toggleLang()">🌐 ${t.langLabel === 'FR' ? 'English' : 'Français'}</button>
+    </div>
 
     <section class="hero">
         <div class="badge">${t.badge}</div>
@@ -986,6 +1076,36 @@ async function renderHome(tmdb, lang, tmdbLang) {
             const newLang = document.documentElement.lang === 'fr' ? 'en' : 'fr';
             fetch('/api/set-language?lang=' + newLang).then(() => location.reload());
         }
+        
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileNav = document.getElementById('mobileNav');
+        let isMenuOpen = false;
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            isMenuOpen = !isMenuOpen;
+            mobileNav.classList.toggle('active', isMenuOpen);
+            mobileMenuBtn.textContent = isMenuOpen ? '✕' : '☰';
+            mobileMenuBtn.setAttribute('aria-expanded', isMenuOpen);
+        });
+        
+        mobileNav.querySelectorAll('a, button').forEach(link => {
+            link.addEventListener('click', () => {
+                isMenuOpen = false;
+                mobileNav.classList.remove('active');
+                mobileMenuBtn.textContent = '☰';
+                mobileMenuBtn.setAttribute('aria-expanded', 'false');
+            });
+        });
+        
+        document.addEventListener('click', (e) => {
+            if (isMenuOpen && !mobileNav.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+                isMenuOpen = false;
+                mobileNav.classList.remove('active');
+                mobileMenuBtn.textContent = '☰';
+                mobileMenuBtn.setAttribute('aria-expanded', 'false');
+            }
+        });
     </script>
 </body>
 </html>`;
@@ -1049,7 +1169,8 @@ async function renderAnime(tmdb, lang, tmdbLang) {
 <html lang="${lang}">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+    <meta name="theme-color" content="#0c0c0c">
     <title>${t.title}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
@@ -1117,10 +1238,73 @@ async function renderAnime(tmdb, lang, tmdbLang) {
         background: var(--surface);
         border: 1px solid var(--border);
         color: var(--text);
-        padding: 6px 12px;
+        padding: 8px 14px;
         border-radius: 4px;
         cursor: pointer;
         font-size: 0.85rem;
+        min-height: 36px;
+        min-width: 44px;
+      }
+      
+      /* Mobile Menu */
+      .mobile-menu-btn {
+        display: none;
+        width: 44px;
+        height: 44px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        color: var(--text);
+        font-size: 1.1rem;
+        cursor: pointer;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+        -webkit-tap-highlight-color: rgba(255, 107, 53, 0.3);
+      }
+      
+      .mobile-menu-btn:hover { background: var(--surface-hover); border-color: var(--accent); }
+      .mobile-menu-btn:active { transform: scale(0.95); }
+      
+      .mobile-nav {
+        display: none;
+        position: fixed;
+        top: 64px;
+        left: 0; right: 0;
+        background: rgba(12, 12, 12, 0.98);
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid var(--border);
+        padding: 12px;
+        z-index: 99;
+        transform: translateY(-100%);
+        opacity: 0;
+        transition: all 0.25s ease;
+      }
+      
+      .mobile-nav.active { transform: translateY(0); opacity: 1; }
+      
+      .mobile-nav a, .mobile-nav button {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+        padding: 16px;
+        color: var(--text-muted);
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 1rem;
+        border-radius: 8px;
+        transition: all 0.2s;
+        min-height: 56px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        text-align: left;
+      }
+      
+      .mobile-nav a:hover, .mobile-nav a.active, .mobile-nav button:hover {
+        background: var(--surface);
+        color: var(--text);
       }
       
       .hero {
@@ -1267,14 +1451,32 @@ async function renderAnime(tmdb, lang, tmdbLang) {
         .shows-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       }
       
-      @media (max-width: 600px) {
-        .hero h1 { font-size: 2.5rem; }
-        .shows-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-        .show-info { padding: 10px; margin-top: 8px; border-radius: 8px; }
-        .show-title { font-size: 0.85rem; }
-        .show-meta { font-size: 0.7rem; gap: 6px; }
-        .nav { padding: 0 24px; }
-        .hero, .section { padding-left: 24px; padding-right: 24px; }
+      @media (max-width: 768px) {
+        .nav { padding: 0 20px; height: 60px; }
+        .nav-links { display: none; }
+        .mobile-menu-btn { display: flex; }
+        .mobile-nav { display: block; top: 60px; }
+        .hero { padding: 100px 20px 60px; }
+        .hero h1 { font-size: 2rem; }
+        .hero p { font-size: 1rem; }
+        .section { padding: 40px 20px; }
+        footer { padding: 40px 20px; }
+      }
+      
+      @media (max-width: 480px) {
+        .hero h1 { font-size: 1.6rem; }
+        .shows-grid { grid-template-columns: 1fr; }
+      }
+      
+      @supports (padding-top: env(safe-area-inset-top)) {
+        .nav { padding-top: env(safe-area-inset-top); height: calc(64px + env(safe-area-inset-top)); }
+        .mobile-nav { top: calc(64px + env(safe-area-inset-top)); }
+        .hero { padding-top: calc(140px + env(safe-area-inset-top)); }
+        @media (max-width: 768px) {
+          .nav { height: calc(60px + env(safe-area-inset-top)); }
+          .mobile-nav { top: calc(60px + env(safe-area-inset-top)); }
+          .hero { padding-top: calc(100px + env(safe-area-inset-top)); }
+        }
       }
     </style>
 </head>
@@ -1286,7 +1488,14 @@ async function renderAnime(tmdb, lang, tmdbLang) {
             <a href="/anime" class="active">${t.anime}</a>
             <button class="lang-switch" onclick="toggleLang()">${t.langLabel}</button>
         </div>
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu">☰</button>
     </nav>
+    
+    <div class="mobile-nav" id="mobileNav">
+        <a href="/">${lang === 'fr' ? '🏠 Accueil' : '🏠 Home'}</a>
+        <a href="/anime" class="active">📺 ${t.anime}</a>
+        <button onclick="toggleLang()">🌐 ${t.langLabel === 'FR' ? 'English' : 'Français'}</button>
+    </div>
 
     <section class="hero">
         <div class="badge">${t.badge}</div>
@@ -1309,6 +1518,23 @@ async function renderAnime(tmdb, lang, tmdbLang) {
             const newLang = document.documentElement.lang === 'fr' ? 'en' : 'fr';
             fetch('/api/set-language?lang=' + newLang).then(() => location.reload());
         }
+        
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileNav = document.getElementById('mobileNav');
+        let isMenuOpen = false;
+        mobileMenuBtn.addEventListener('click', () => {
+            isMenuOpen = !isMenuOpen;
+            mobileNav.classList.toggle('active', isMenuOpen);
+            mobileMenuBtn.textContent = isMenuOpen ? '✕' : '☰';
+            mobileMenuBtn.setAttribute('aria-expanded', isMenuOpen);
+        });
+        mobileNav.querySelectorAll('a, button').forEach(link => {
+            link.addEventListener('click', () => {
+                isMenuOpen = false;
+                mobileNav.classList.remove('active');
+                mobileMenuBtn.textContent = '☰';
+            });
+        });
     </script>
 </body>
 </html>`;
@@ -1423,6 +1649,8 @@ async function renderShow(showId, seasonNum, tmdb, lang, tmdbLang) {
 <html lang="${lang}">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+    <meta name="theme-color" content="#0c0c0c">
     <title>${showData.name} — Filler Tracker</title>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
     <style>
@@ -1473,6 +1701,67 @@ async function renderShow(showId, seasonNum, tmdb, lang, tmdbLang) {
         color: var(--text-muted);
         text-decoration: none;
         font-size: 0.9rem;
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+        padding: 0 8px;
+      }
+      
+      /* Mobile Menu */
+      .mobile-menu-btn {
+        display: none;
+        width: 44px;
+        height: 44px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        color: var(--text);
+        font-size: 1.1rem;
+        cursor: pointer;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+        -webkit-tap-highlight-color: rgba(255, 107, 53, 0.3);
+      }
+      
+      .mobile-menu-btn:hover { background: var(--surface-hover); border-color: var(--accent); }
+      .mobile-menu-btn:active { transform: scale(0.95); }
+      
+      .mobile-nav {
+        display: none;
+        position: fixed;
+        top: 64px;
+        left: 0; right: 0;
+        background: rgba(12, 12, 12, 0.98);
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid var(--border);
+        padding: 12px;
+        z-index: 99;
+        transform: translateY(-100%);
+        opacity: 0;
+        transition: all 0.25s ease;
+      }
+      
+      .mobile-nav.active { transform: translateY(0); opacity: 1; }
+      
+      .mobile-nav a {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+        padding: 16px;
+        color: var(--text-muted);
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 1rem;
+        border-radius: 8px;
+        transition: all 0.2s;
+        min-height: 56px;
+      }
+      
+      .mobile-nav a:hover, .mobile-nav a.active {
+        background: var(--surface);
+        color: var(--text);
       }
       
       .hero-backdrop {
@@ -1734,12 +2023,40 @@ async function renderShow(showId, seasonNum, tmdb, lang, tmdbLang) {
       }
       
       @media (max-width: 768px) {
-        .container { padding: 0 24px 48px; }
+        .nav { padding: 0 20px; height: 60px; }
+        .nav-links { display: none; }
+        .mobile-menu-btn { display: flex; }
+        .mobile-nav { display: block; top: 60px; }
+        .container { padding: 20px; padding-bottom: 48px; }
         .show-header { flex-direction: column; }
-        .show-poster { width: 150px; height: 225px; }
-        .show-info h1 { font-size: 2rem; }
-        .episode { flex-direction: column; }
-        .ep-still { width: 100%; height: 140px; }
+        .show-poster { width: 140px; height: 210px; }
+        .show-info h1 { font-size: 1.6rem; }
+        .show-info p { font-size: 0.9rem; }
+        .episode { flex-direction: column; gap: 16px; padding: 16px; }
+        .ep-still { width: 100%; height: 160px; }
+        .ep-header { flex-direction: column; gap: 12px; }
+        .ep-title { font-size: 1rem; }
+        .ep-badge { align-self: flex-start; }
+        .season-selector { padding: 12px; margin: 20px 0 12px; }
+        .season-btn { padding: 10px 14px; font-size: 0.85rem; min-height: 44px; }
+        .season-header-row { flex-direction: column; gap: 16px; align-items: flex-start; margin: 20px 0; }
+        .expand-all-btn { width: 100%; min-height: 44px; }
+        .back-link { margin: 20px 0; display: inline-flex; min-height: 44px; align-items: center; }
+      }
+      
+      @media (max-width: 480px) {
+        .show-info h1 { font-size: 1.4rem; }
+        .ep-still { height: 140px; }
+        .ep-number-fallback { font-size: 1.5rem; }
+      }
+      
+      @supports (padding-top: env(safe-area-inset-top)) {
+        .nav { padding-top: env(safe-area-inset-top); height: calc(64px + env(safe-area-inset-top)); }
+        .mobile-nav { top: calc(64px + env(safe-area-inset-top)); }
+        @media (max-width: 768px) {
+          .nav { height: calc(60px + env(safe-area-inset-top)); }
+          .mobile-nav { top: calc(60px + env(safe-area-inset-top)); }
+        }
       }
     </style>
 </head>
@@ -1750,7 +2067,13 @@ async function renderShow(showId, seasonNum, tmdb, lang, tmdbLang) {
             <a href="/">${lang === 'fr' ? 'Accueil' : 'Home'}</a>
             <a href="/anime">${lang === 'fr' ? 'Anime' : 'Anime'}</a>
         </div>
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu">☰</button>
     </nav>
+    
+    <div class="mobile-nav" id="mobileNav">
+        <a href="/">${lang === 'fr' ? '🏠 Accueil' : '🏠 Home'}</a>
+        <a href="/anime">📺 ${lang === 'fr' ? 'Anime' : 'Anime'}</a>
+    </div>
     
     <div class="hero-backdrop" style="background-image: url('${backdrop || poster}')"></div>
     
@@ -1808,6 +2131,31 @@ async function renderShow(showId, seasonNum, tmdb, lang, tmdbLang) {
             });
             btn.textContent = allExpanded ? '${lang === 'fr' ? 'Tout replier' : 'Collapse all'}' : '${lang === 'fr' ? 'Tout déplier' : 'Expand all'}';
         }
+        
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileNav = document.getElementById('mobileNav');
+        let isMenuOpen = false;
+        mobileMenuBtn.addEventListener('click', () => {
+            isMenuOpen = !isMenuOpen;
+            mobileNav.classList.toggle('active', isMenuOpen);
+            mobileMenuBtn.textContent = isMenuOpen ? '✕' : '☰';
+            mobileMenuBtn.setAttribute('aria-expanded', isMenuOpen);
+        });
+        mobileNav.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                isMenuOpen = false;
+                mobileNav.classList.remove('active');
+                mobileMenuBtn.textContent = '☰';
+            });
+        });
+        document.addEventListener('click', (e) => {
+            if (isMenuOpen && !mobileNav.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+                isMenuOpen = false;
+                mobileNav.classList.remove('active');
+                mobileMenuBtn.textContent = '☰';
+            }
+        });
     </script>
 </body>
 </html>`;
